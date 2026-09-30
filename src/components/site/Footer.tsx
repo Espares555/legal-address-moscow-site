@@ -3,6 +3,7 @@ import { OKRUG_INFO, OKRUG_LIST } from "@/data/okrugs";
 import { METRO_LIST, metroSlug } from "@/data/metro";
 import { DISTRICT_LIST, districtSlug } from "@/data/districts";
 import { SERVICES } from "@/data/services";
+import { ARTICLES } from "@/data/articles";
 
 export default function Footer() {
   return (
@@ -43,6 +44,16 @@ export default function Footer() {
           {SERVICES.map((x) => (
             <a key={x.slug} href={`/services/${x.slug}`} className="hover:text-band-1">
               {x.name}
+            </a>
+          ))}
+        </nav>
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">
+          <a href="/articles" className="hover:text-band-1">Статьи</a>
+        </p>
+        <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {ARTICLES.map((x) => (
+            <a key={x.slug} href={`/articles/${x.slug}`} className="hover:text-band-1">
+              {x.title}
             </a>
           ))}
         </nav>

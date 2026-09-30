@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Link } from "react-router-dom";
 import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
 import ChipGroup from "./ChipGroup";
+import { okrugSlug } from "@/data/okrugs";
 import { useReveal } from "@/hooks/use-reveal";
 
 type Props = {
@@ -35,22 +36,6 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
   return (
     <section id="catalog" ref={ref} className="scroll-mt-20 border-t border-line bg-background">
       <div className="mx-3 border-x border-line lg:mx-[18px]">
-        <div className="grid gap-6 border-b border-line px-6 py-14 lg:grid-cols-[420px_1fr] lg:px-0 lg:py-0">
-          <div className="reveal lg:border-r lg:border-line lg:py-16 lg:pl-14">
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">01 / Каталог</span>
-          </div>
-          <div className="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end lg:px-14 lg:py-16">
-            <h2 className="font-head text-[40px] font-extrabold leading-[1] tracking-[-0.035em] md:text-[56px]">
-              База адресов
-              <br />
-              <span className="text-primary">с фильтрами</span>
-            </h2>
-            <p className="max-w-[340px] text-muted-foreground">
-              {ADDRESSES.length} проверенных объектов. Собственник подтверждает адрес, ФНС принимает документы с первого раза.
-            </p>
-          </div>
-        </div>
-
         <div className="space-y-7 border-b border-line bg-surface px-6 py-8 lg:px-9">
           <ChipGroup
             title="Выбор по ИФНС"
@@ -65,6 +50,11 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
             current={filters.okrug}
             onChange={(v) => setFilters({ ...filters, okrug: v })}
           />
+          {filters.okrug !== "all" && (
+            <Link to={`/okrug/${okrugSlug(filters.okrug)}`} className="mr-6 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+              Всё об округе {filters.okrug} <Icon name="ArrowRight" size={14} />
+            </Link>
+          )}
           {filters.ifns !== "all" && (
             <Link to={`/ifns/${filters.ifns}`} className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
               Всё об инспекции ИФНС № {filters.ifns} <Icon name="ArrowRight" size={14} />
@@ -157,7 +147,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                   <img src={getPhoto(a)} alt={a.street} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </Link>
                 <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
-                  <span className="bg-primary px-2 py-0.5 text-primary-foreground">{a.okrug}</span>
+                  <Link to={`/okrug/${okrugSlug(a.okrug)}`} className="bg-primary px-2 py-0.5 text-primary-foreground hover:bg-ink">{a.okrug}</Link>
                   <span className="text-muted-foreground">{a.district}</span>
                 </div>
                 <h3 className="mt-2 text-[18px] font-bold leading-snug tracking-[-0.01em]">

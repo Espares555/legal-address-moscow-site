@@ -8,6 +8,7 @@ import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
 import { ADDRESSES, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import NotFound from "./NotFound";
+import { okrugSlug } from "@/data/okrugs";
 
 export default function AddressPage() {
   const { id } = useParams();
@@ -55,7 +56,7 @@ export default function AddressPage() {
           <div className="relative aspect-[4/3] overflow-hidden border-b border-line lg:aspect-auto lg:min-h-[560px] lg:border-r">
             <img src={getPhoto(a)} alt={`Здание по адресу ${a.street}`} className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute left-4 top-4 flex gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
-              <span className="bg-primary px-2.5 py-1 text-primary-foreground">{a.okrug}</span>
+              <Link to={`/okrug/${okrugSlug(a.okrug)}`} className="bg-primary px-2.5 py-1 text-primary-foreground hover:bg-ink">{a.okrug}</Link>
               <Link to={`/ifns/${a.ifns}`} className="bg-background px-2.5 py-1 hover:text-primary">ИФНС № {a.ifns}</Link>
             </div>
           </div>

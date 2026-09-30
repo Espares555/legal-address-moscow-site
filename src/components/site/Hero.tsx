@@ -1,3 +1,5 @@
+import { ADDRESSES } from "@/data/addresses";
+
 export default function Hero() {
   return (
     <main
@@ -24,9 +26,12 @@ export default function Hero() {
           <br />
           Москвы
         </h1>
-        <p className="max-w-[300px] pb-2.5 text-[14.5px] leading-[1.6] text-muted-foreground">
-          Адреса для регистрации и смены юрадреса. Задайте параметры — покажем объекты списком и на карте.
-        </p>
+        <div className="max-w-[300px] space-y-3 pb-2.5 text-[14.5px] leading-[1.6] text-muted-foreground">
+          <p>Адреса для регистрации и смены юрадреса. Задайте параметры — покажем объекты списком и на карте.</p>
+          <p>
+            {ADDRESSES.length} проверенных объектов. Собственник подтверждает адрес, ФНС принимает документы с первого раза.
+          </p>
+        </div>
       </div>
 
     </main>

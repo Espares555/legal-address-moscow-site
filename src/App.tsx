@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AddressPage from "./pages/AddressPage";
 import IfnsPage from "./pages/IfnsPage";
+import OkrugPage from "./pages/OkrugPage";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/address/:id" element={<AddressPage />} />
           <Route path="/ifns/:num" element={<IfnsPage />} />
+          <Route path="/okrug/:slug" element={<OkrugPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

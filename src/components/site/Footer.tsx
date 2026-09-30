@@ -1,4 +1,5 @@
 import { IFNS_LIST } from "@/data/ifns";
+import { OKRUG_INFO, OKRUG_LIST } from "@/data/okrugs";
 
 export default function Footer() {
   return (
@@ -26,6 +27,14 @@ export default function Footer() {
         <p className="text-[13px] text-topbar-foreground/50">© 2026 Меркурий. Все права защищены.</p>
       </div>
       <div className="border-t border-topbar-foreground/10 px-6 py-6 lg:px-14">
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Юридические адреса по округам</p>
+        <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {OKRUG_LIST.map((n) => (
+            <a key={n} href={`/okrug/${OKRUG_INFO[n].slug}`} className="hover:text-band-1">
+              {n}
+            </a>
+          ))}
+        </nav>
         <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Юридические адреса по инспекциям</p>
         <nav className="flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
           {IFNS_LIST.map((n) => (

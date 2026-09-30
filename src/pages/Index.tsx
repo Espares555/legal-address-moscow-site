@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
 import Catalog from "@/components/site/Catalog";
@@ -16,6 +16,11 @@ const Index = () => {
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [dialog, setDialog] = useState(false);
   const [subject, setSubject] = useState("");
+
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (id) setTimeout(() => scrollTo(id), 100);
+  }, []);
 
   const openRequest = (s = "") => {
     setSubject(s);

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
-import { ADDRESSES, Address, formatPrice } from "@/data/addresses";
+import { ADDRESSES, Address, formatPrice, uniq } from "@/data/addresses";
 import { useReveal } from "@/hooks/use-reveal";
+import { Link } from "react-router-dom";
+import YandexMap from "./YandexMap";
 
 type Props = { onRequest: (a?: Address) => void };
 
-const OKRUGS = ["Все", "ЦАО", "САО", "СВАО", "ВАО", "ЮВАО", "ЮАО", "ЮЗАО", "ЗАО", "СЗАО"];
+const OKRUGS = ["Все", ...uniq("okrug")];
 
 export default function MapSection({ onRequest }: Props) {
   const [okrug, setOkrug] = useState("Все");
@@ -27,7 +29,7 @@ export default function MapSection({ onRequest }: Props) {
               <br />
               на карте Москвы
             </h2>
-            <p className="max-w-[340px] text-muted-foreground">Выберите округ и нажмите на точку — покажем инспекцию, метро и стоимость.</p>
+            <p className="max-w-[340px] text-muted-foreground">Все адреса каталога на карте Яндекса. Нажмите на метку — покажем инспекцию, метро и стоимость.</p>
           </div>
         </div>
 
@@ -48,54 +50,14 @@ export default function MapSection({ onRequest }: Props) {
         </div>
 
         <div className="grid lg:grid-cols-[1fr_420px]">
-          <div className="relative aspect-square overflow-hidden border-b border-line bg-background sm:aspect-[4/3] lg:aspect-auto lg:min-h-[620px] lg:border-b-0 lg:border-r">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 h-full w-full" aria-hidden="true">
-              <defs>
-                <pattern id="grid" width="5" height="5" patternUnits="userSpaceOnUse">
-                  <path d="M5 0H0V5" fill="none" className="stroke-line" strokeWidth="0.15" />
-                </pattern>
-              </defs>
-              <rect width="100" height="100" fill="url(#grid)" />
-              <ellipse cx="50" cy="48" rx="40" ry="38" fill="none" className="stroke-band-1" strokeWidth="2.2" opacity="0.5" />
-              <ellipse cx="50" cy="48" rx="21" ry="19" fill="none" className="stroke-band-2" strokeWidth="1.6" opacity="0.6" />
-              <ellipse cx="51" cy="48" rx="9" ry="8" fill="none" className="stroke-band-4" strokeWidth="1.2" opacity="0.7" />
-              <path
-                d="M8 40 C 20 42, 28 52, 36 50 S 44 40, 50 50 S 58 60, 64 58 S 74 64, 80 72 S 90 76, 96 74"
-                fill="none"
-                className="stroke-band-1"
-                strokeWidth="1.6"
-                opacity="0.35"
-              />
-              <text x="50" y="12" textAnchor="middle" className="fill-muted-foreground" fontSize="2.4" fontWeight="600" letterSpacing="0.3">
-                МКАД
-              </text>
-              <text x="50" y="31" textAnchor="middle" className="fill-muted-foreground" fontSize="2" fontWeight="600">
-                ТТК
-              </text>
-            </svg>
-
-            {list.map((a) => {
-              const on = active?.id === a.id;
-              return (
-                <button
-                  key={a.id}
-                  onClick={() => setActive(a)}
-                  style={{ left: `${a.x}%`, top: `${a.y}%` }}
-                  className="group absolute -translate-x-1/2 -translate-y-1/2"
-                  aria-label={a.street}
-                >
-                  {on && <span className="absolute inset-0 rounded-full bg-primary" style={{ animation: "pin-pulse 1.6s ease-out infinite" }} />}
-                  <span
-                    className={`relative grid place-items-center rounded-full border-[3px] border-white transition-all ${on ? "h-7 w-7 bg-band-4" : "h-5 w-5 bg-primary group-hover:scale-125"}`}
-                  />
-                  <span className="pointer-events-none absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 whitespace-nowrap bg-ink px-2 py-1 text-[11px] font-semibold text-ink-foreground group-hover:block">
-                    {formatPrice(a.price)} ₽
-                  </span>
-                </button>
-              );
-            })}
-
-            <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-background/90 px-3 py-2 text-[12px] font-medium text-muted-foreground">
+          <div className="relative border-b border-line lg:border-b-0 lg:border-r">
+            <YandexMap
+              addresses={list}
+              activeId={active?.id}
+              onSelect={setActive}
+              className="aspect-square sm:aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[620px]"
+            />
+            <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 bg-background/90 px-3 py-2 text-[12px] font-medium text-muted-foreground">
               <span className="h-3 w-3 rounded-full border-2 border-white bg-primary" /> {list.length} объектов на карте
             </div>
           </div>
@@ -121,6 +83,9 @@ export default function MapSection({ onRequest }: Props) {
                     </div>
                   ))}
                 </dl>
+                <Link to={`/address/${active.id}`} className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+                  Подробнее об адресе <Icon name="ArrowRight" size={14} />
+                </Link>
                 <div className="mt-6 flex items-center justify-between">
                   <span className="font-head text-[30px] font-extrabold tracking-[-0.02em]">{formatPrice(active.price)} ₽</span>
                   <button onClick={() => onRequest(active)} className="h-11 bg-ink px-5 font-semibold text-ink-foreground transition-colors hover:bg-primary">

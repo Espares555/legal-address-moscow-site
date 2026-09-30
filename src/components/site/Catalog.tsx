@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, plural, uniq } from "@/data/addresses";
+import { Link } from "react-router-dom";
+import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
+import ChipGroup from "./ChipGroup";
 import { useReveal } from "@/hooks/use-reveal";
 
 type Props = {
@@ -13,8 +15,6 @@ type Props = {
 type Sort = "price-asc" | "price-desc" | "ifns";
 
 const FIELDS: { key: keyof Omit<Filters, "query">; label: string; all: string; fmt?: (v: string) => string }[] = [
-  { key: "ifns", label: "ИФНС", all: "Все инспекции", fmt: (v) => `ИФНС № ${v}` },
-  { key: "okrug", label: "Округ", all: "Все округа" },
   { key: "district", label: "Район", all: "Все районы" },
   { key: "metro", label: "Метро", all: "Все станции", fmt: (v) => `м. ${v}` },
 ];
@@ -51,8 +51,24 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
           </div>
         </div>
 
+        <div className="space-y-7 border-b border-line bg-surface px-6 py-8 lg:px-9">
+          <ChipGroup
+            title="Выбор по ИФНС"
+            values={uniq("ifns")}
+            current={filters.ifns}
+            fmt={(v) => `ИФНС ${v}`}
+            onChange={(v) => setFilters({ ...filters, ifns: v })}
+          />
+          <ChipGroup
+            title="Выбор по округам"
+            values={uniq("okrug")}
+            current={filters.okrug}
+            onChange={(v) => setFilters({ ...filters, okrug: v })}
+          />
+        </div>
+
         {/* filters */}
-        <div className="grid gap-px border-b border-line bg-line sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)_auto]">
+        <div className="grid gap-px border-b border-line bg-line sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(2,1fr)_auto]">
           <label className="flex h-16 items-center gap-3 bg-surface px-6">
             <Icon name="Search" size={18} className="text-muted-foreground" />
             <input
@@ -132,11 +148,18 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                 key={a.id}
                 className="group relative flex flex-col gap-2 border-b border-line px-6 py-7 transition-colors hover:bg-surface sm:border-r lg:px-9"
               >
+                <Link to={`/address/${a.id}`} className="-mx-6 -mt-7 mb-3 block aspect-[16/10] overflow-hidden lg:-mx-9">
+                  <img src={getPhoto(a)} alt={a.street} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                </Link>
                 <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
                   <span className="bg-primary px-2 py-0.5 text-primary-foreground">{a.okrug}</span>
                   <span className="text-muted-foreground">{a.district}</span>
                 </div>
-                <h3 className="mt-2 text-[18px] font-bold leading-snug tracking-[-0.01em]">{a.street}</h3>
+                <h3 className="mt-2 text-[18px] font-bold leading-snug tracking-[-0.01em]">
+                  <Link to={`/address/${a.id}`} className="transition-colors hover:text-primary">
+                    {a.street}
+                  </Link>
+                </h3>
                 <p className="text-[13.5px] text-muted-foreground">
                   ИФНС № {a.ifns} · м. {a.metro}
                 </p>

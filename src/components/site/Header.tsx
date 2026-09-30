@@ -2,11 +2,11 @@ import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const NAV = [
-  { href: "#catalog", label: "База адресов" },
-  { href: "#map", label: "На карте" },
-  { href: "#services", label: "Услуги и цены" },
-  { href: "#faq", label: "Вопросы" },
-  { href: "#contacts", label: "Контакты" },
+  { href: "/#catalog", label: "База адресов" },
+  { href: "/#map", label: "На карте" },
+  { href: "/#services", label: "Услуги и цены" },
+  { href: "/#faq", label: "Вопросы" },
+  { href: "/#contacts", label: "Контакты" },
 ];
 
 type Props = { onPick: () => void };
@@ -17,7 +17,7 @@ export default function Header({ onPick }: Props) {
   return (
     <>
       <a
-        href="#catalog"
+        href="/#catalog"
         className="flex h-10 items-center justify-center gap-3 bg-topbar px-4 text-center text-[15px] font-medium text-topbar-foreground"
       >
         <span className="truncate">Новые адреса в ЦАО — уже в базе</span>
@@ -28,7 +28,7 @@ export default function Header({ onPick }: Props) {
 
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
         <div className="flex h-[72px] items-center px-5 lg:px-9">
-          <a href="#top" className="font-head text-[26px] font-extrabold tracking-[-0.03em]">
+          <a href="/#top" className="font-head text-[26px] font-extrabold tracking-[-0.03em]">
             Меркурий<span className="text-primary">.</span>
           </a>
 

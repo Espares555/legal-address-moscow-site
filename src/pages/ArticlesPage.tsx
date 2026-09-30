@@ -6,16 +6,30 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import ArticleCard from "@/components/site/ArticleCard";
 import { ARTICLES } from "@/data/articles";
-import { setMeta } from "@/lib/meta";
+import { abs, breadcrumbs, useSeo } from "@/lib/seo";
 
 export default function ArticlesPage() {
   const [dialog, setDialog] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Статьи о регистрации ООО и юридических адресах | Меркурий";
-    setMeta("description", "Полезные статьи о регистрации ООО, выборе и смене юридического адреса, почтовом обслуживании и работе с налоговой в Москве.");
   }, []);
+
+  useSeo({
+    title: "Статьи о регистрации ООО и юридических адресах | Меркурий",
+    description: "Полезные статьи о регистрации ООО и ИП, выборе и смене юридического адреса, налогах, расчётном счёте и работе с налоговой в Москве.",
+    schema: [
+      breadcrumbs([["Статьи", "/articles"]]),
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        name: "Статьи компании «Меркурий»",
+        url: abs("/articles"),
+        publisher: { "@id": abs("/#organization") },
+        blogPost: ARTICLES.map((a) => ({ "@type": "BlogPosting", headline: a.title, datePublished: a.date, url: abs(`/articles/${a.slug}`) })),
+      },
+    ],
+  });
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">

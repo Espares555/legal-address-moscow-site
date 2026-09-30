@@ -8,17 +8,9 @@ import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
 import { Address, formatPrice, getPhoto, plural } from "@/data/addresses";
 import { IFNS_LIST, getIfns, getIfnsDescription, ifnsTitle } from "@/data/ifns";
+import { addressListSchema, breadcrumbs, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
-const setMeta = (name: string, content: string) => {
-  let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.name = name;
-    document.head.appendChild(el);
-  }
-  el.content = content;
-};
 
 export default function IfnsPage() {
   const { num = "" } = useParams();
@@ -29,15 +21,23 @@ export default function IfnsPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!ifns) return;
-    document.title = `${ifnsTitle(ifns.num)} — от ${formatPrice(ifns.minPrice)} ₽ | Меркурий`;
-    setMeta(
-      "description",
-      `Юридические адреса в ИФНС № ${ifns.num} Москвы (${ifns.districts.join(", ")}): ${ifns.addresses.length} ${plural(ifns.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(ifns.minPrice)} ₽, карта, описание инспекции.`,
-    );
-    setActive(ifns.addresses[0]);
+    if (ifns) setActive(ifns.addresses[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [num]);
+
+  useSeo(
+    ifns
+      ? {
+          title: `${ifnsTitle(ifns.num)} — от ${formatPrice(ifns.minPrice)} ₽ | Меркурий`,
+          description: `Юридические адреса в ИФНС № ${ifns.num} Москвы (${ifns.districts.join(", ")}): ${ifns.addresses.length} ${plural(ifns.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(ifns.minPrice)} ₽, карта, описание инспекции.`,
+          image: getPhoto(ifns.addresses[0]),
+          schema: [
+            breadcrumbs([["База адресов", "/#catalog"], [`ИФНС № ${ifns.num}`, `/ifns/${ifns.num}`]]),
+            addressListSchema(`Юридические адреса в ИФНС № ${ifns.num}`, ifns.addresses),
+          ],
+        }
+      : { title: "Инспекция не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!ifns) return <NotFound />;
 

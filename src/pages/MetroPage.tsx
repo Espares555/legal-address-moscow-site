@@ -9,17 +9,9 @@ import YandexMap from "@/components/site/YandexMap";
 import { Address, formatPrice, getPhoto, plural } from "@/data/addresses";
 import { METRO_LIST, getMetroBySlug, getMetroDescription, metroSlug } from "@/data/metro";
 import { okrugSlug } from "@/data/okrugs";
+import { addressListSchema, breadcrumbs, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
-const setMeta = (name: string, content: string) => {
-  let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.name = name;
-    document.head.appendChild(el);
-  }
-  el.content = content;
-};
 
 export default function MetroPage() {
   const { slug = "" } = useParams();
@@ -30,15 +22,20 @@ export default function MetroPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!o) return;
-    document.title = `Юридический адрес у метро ${o.name} — от ${formatPrice(o.minPrice)} ₽ | Меркурий`;
-    setMeta(
-      "description",
-      `Юридические адреса рядом с метро «${o.name}» (${o.districts.join(", ")}, ${o.okrugs.join(", ")}): ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽. Карта, ИФНС, цены.`,
-    );
-    setActive(o.addresses[0]);
+    if (o) setActive(o.addresses[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  useSeo(
+    o
+      ? {
+          title: `Юридический адрес у метро ${o.name} — от ${formatPrice(o.minPrice)} ₽ | Меркурий`,
+          description: `Юридические адреса рядом с метро «${o.name}» (${o.districts.join(", ")}, ${o.okrugs.join(", ")}): ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽. Карта, ИФНС, цены.`,
+          image: getPhoto(o.addresses[0]),
+          schema: [breadcrumbs([["База адресов", "/#catalog"], [`м. ${o.name}`, `/metro/${o.slug}`]]), addressListSchema(`Юридические адреса у метро ${o.name}`, o.addresses)],
+        }
+      : { title: "Страница не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!o) return <NotFound />;
 

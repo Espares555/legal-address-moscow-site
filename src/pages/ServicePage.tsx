@@ -6,17 +6,9 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import { SERVICES, getService } from "@/data/services";
+import { abs, breadcrumbs, parsePrice, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
-const setMeta = (name: string, content: string) => {
-  let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.name = name;
-    document.head.appendChild(el);
-  }
-  el.content = content;
-};
 
 export default function ServicePage() {
   const { slug = "" } = useParams();
@@ -26,10 +18,52 @@ export default function ServicePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!s) return;
-    document.title = `${s.seoTitle} — ${s.price} | Меркурий`;
-    setMeta("description", s.seoDesc);
-  }, [s]);
+  }, [slug]);
+
+  useSeo(
+    s
+      ? {
+          title: `${s.seoTitle} — ${s.price} | Меркурий`,
+          description: s.seoDesc,
+          schema: [
+            breadcrumbs([["Услуги", "/#services"], [s.name, `/services/${s.slug}`]]),
+            {
+              "@context": "https://schema.org",
+              "@type": "Service",
+              name: s.name,
+              serviceType: s.name,
+              description: s.seoDesc,
+              url: abs(`/services/${s.slug}`),
+              provider: { "@id": abs("/#organization") },
+              areaServed: { "@type": "City", name: "Москва" },
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "RUB",
+                lowPrice: Math.min(...s.prices.map((p) => parsePrice(p.price)).filter((n) => n > 0).concat(parsePrice(s.price) || 0)),
+                offerCount: s.prices.length,
+              },
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: s.name,
+                itemListElement: s.prices.map((p) => ({
+                  "@type": "Offer",
+                  name: p.name,
+                  priceCurrency: "RUB",
+                  ...(parsePrice(p.price) ? { price: parsePrice(p.price) } : {}),
+                  description: p.price,
+                })),
+              },
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "HowTo",
+              name: `Этапы: ${s.name}`,
+              step: s.steps.map((st, i) => ({ "@type": "HowToStep", position: i + 1, name: st.title, text: st.text })),
+            },
+          ],
+        }
+      : { title: "Услуга не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!s) return <NotFound />;
 

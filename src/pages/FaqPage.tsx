@@ -7,9 +7,7 @@ import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FAQ, FAQ_ALL } from "@/data/faq";
-import { setMeta } from "@/lib/meta";
-
-const SCHEMA_ID = "faq-schema";
+import { breadcrumbs, faqSchema, useSeo } from "@/lib/seo";
 
 export default function FaqPage() {
   const [dialog, setDialog] = useState(false);
@@ -18,19 +16,13 @@ export default function FaqPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Вопросы и ответы о юридических адресах и регистрации ООО | Меркурий";
-    setMeta("description", "Ответы на частые вопросы о юридических адресах в Москве, регистрации и смене адреса ООО, проверках налоговой, почтовом обслуживании и открытии расчётного счёта.");
-    const el = document.createElement("script");
-    el.type = "application/ld+json";
-    el.id = SCHEMA_ID;
-    el.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: FAQ_ALL.map((x) => ({ "@type": "Question", name: x.q, acceptedAnswer: { "@type": "Answer", text: x.a } })),
-    });
-    document.head.appendChild(el);
-    return () => el.remove();
   }, []);
+
+  useSeo({
+    title: "Вопросы и ответы о юридических адресах и регистрации ООО | Меркурий",
+    description: "Ответы на частые вопросы о юридических адресах в Москве, регистрации и смене адреса ООО, проверках налоговой, почтовом обслуживании и открытии расчётного счёта.",
+    schema: [breadcrumbs([["Вопросы и ответы", "/faq"]]), faqSchema(FAQ_ALL)],
+  });
 
   const groups = useMemo(() => {
     const s = q.trim().toLowerCase();

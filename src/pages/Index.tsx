@@ -11,7 +11,10 @@ import Faq from "@/components/site/Faq";
 import Contacts from "@/components/site/Contacts";
 import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
-import { Address, EMPTY_FILTERS, Filters } from "@/data/addresses";
+import { ADDRESSES, Address, EMPTY_FILTERS, Filters } from "@/data/addresses";
+import { FAQ_ALL } from "@/data/faq";
+import { SERVICES } from "@/data/services";
+import { addressListSchema, faqSchema, itemList, useSeo } from "@/lib/seo";
 
 const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -24,6 +27,16 @@ const Index = () => {
     const id = window.location.hash.slice(1);
     if (id) setTimeout(() => scrollTo(id), 100);
   }, []);
+
+  useSeo({
+    title: "Юридический адрес в Москве от 8 700 ₽ — база проверенных адресов | Меркурий",
+    description: `Каталог из ${ADDRESSES.length} проверенных юридических адресов Москвы с фильтрами по ИФНС, округу, району и метро. Регистрация ООО и ИП, смена адреса, почта. Работаем с 1993 года.`,
+    schema: [
+      addressListSchema("Юридические адреса в Москве", ADDRESSES),
+      itemList("Услуги компании «Меркурий»", SERVICES.map((x) => ({ name: x.name, path: `/services/${x.slug}` }))),
+      faqSchema(FAQ_ALL.slice(0, 6)),
+    ],
+  });
 
   const openRequest = (s = "") => {
     setSubject(s);

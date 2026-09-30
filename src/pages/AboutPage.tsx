@@ -7,7 +7,7 @@ import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import { ADDRESSES } from "@/data/addresses";
 import { SERVICES } from "@/data/services";
-import { setMeta } from "@/lib/meta";
+import { abs, breadcrumbs, useSeo } from "@/lib/seo";
 
 const CDN = "https://cdn.poehali.dev/projects/59523c27-a9b3-49d8-adc5-d0bc3334a737/files/";
 
@@ -71,9 +71,30 @@ export default function AboutPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "О компании Меркурий — юридические адреса в Москве с 1993 года";
-    setMeta("description", "Компания «Меркурий» зарегистрирована и работает с 1993 года. Проверенные юридические адреса в Москве, регистрация ООО и ИП, смена адреса, почтовое обслуживание.");
   }, []);
+
+  useSeo({
+    title: "О компании Меркурий — юридические адреса в Москве с 1993 года",
+    description: "Компания «Меркурий» зарегистрирована и работает с 1993 года. Проверенные юридические адреса в Москве, регистрация ООО и ИП, смена адреса, почтовое обслуживание. Реквизиты, офис и команда.",
+    image: GALLERY[0].src,
+    schema: [
+      breadcrumbs([["О компании", "/about"]]),
+      {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        name: "О компании «Меркурий»",
+        url: abs("/about"),
+        mainEntity: { "@id": abs("/#organization") },
+        primaryImageOfPage: GALLERY[0].src,
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        name: "Офис и команда «Меркурий»",
+        image: GALLERY.map((g) => ({ "@type": "ImageObject", contentUrl: g.src, caption: g.alt })),
+      },
+    ],
+  });
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">

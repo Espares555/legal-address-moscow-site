@@ -10,17 +10,9 @@ import { Address, formatPrice, getPhoto, plural } from "@/data/addresses";
 import { DISTRICT_LIST, districtSlug, getDistrictBySlug, getDistrictDescription } from "@/data/districts";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
+import { addressListSchema, breadcrumbs, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
-const setMeta = (name: string, content: string) => {
-  let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.name = name;
-    document.head.appendChild(el);
-  }
-  el.content = content;
-};
 
 export default function DistrictPage() {
   const { slug = "" } = useParams();
@@ -31,15 +23,20 @@ export default function DistrictPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!o) return;
-    document.title = `Юридический адрес в районе ${o.name} (${o.okrug}) — от ${formatPrice(o.minPrice)} ₽ | Меркурий`;
-    setMeta(
-      "description",
-      `Юридические адреса в районе ${o.name}, ${o.okrug} Москвы: ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽. ИФНС № ${o.ifns.join(", ")}, метро ${o.metros.join(", ")}. Карта и цены.`,
-    );
-    setActive(o.addresses[0]);
+    if (o) setActive(o.addresses[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  useSeo(
+    o
+      ? {
+          title: `Юридический адрес в районе ${o.name} (${o.okrug}) — от ${formatPrice(o.minPrice)} ₽ | Меркурий`,
+          description: `Юридические адреса в районе ${o.name}, ${o.okrug} Москвы: ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽. ИФНС № ${o.ifns.join(", ")}, метро ${o.metros.join(", ")}. Карта и цены.`,
+          image: getPhoto(o.addresses[0]),
+          schema: [breadcrumbs([["База адресов", "/#catalog"], [o.okrug, `/okrug/${okrugSlug(o.okrug)}`], [o.name, `/district/${slug}`]]), addressListSchema(`Юридические адреса в районе ${o.name}`, o.addresses)],
+        }
+      : { title: "Страница не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!o) return <NotFound />;
 

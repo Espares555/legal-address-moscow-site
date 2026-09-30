@@ -8,7 +8,7 @@ import RequestForm from "@/components/site/RequestForm";
 import ArticleCard from "@/components/site/ArticleCard";
 import { ARTICLES, Block, formatDate, getArticle } from "@/data/articles";
 import { getService } from "@/data/services";
-import { setMeta } from "@/lib/meta";
+import { DEFAULT_IMAGE, abs, breadcrumbs, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
 function Content({ b }: { b: Block }) {
@@ -51,10 +51,35 @@ export default function ArticlePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!a) return;
-    document.title = `${a.seoTitle} | Меркурий`;
-    setMeta("description", a.seoDesc);
-  }, [a]);
+  }, [slug]);
+
+  useSeo(
+    a
+      ? {
+          title: `${a.seoTitle} | Меркурий`,
+          description: a.seoDesc,
+          type: "article",
+          schema: [
+            breadcrumbs([["Статьи", "/articles"], [a.title, `/articles/${a.slug}`]]),
+            {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: a.title,
+              description: a.seoDesc,
+              datePublished: a.date,
+              dateModified: a.date,
+              inLanguage: "ru-RU",
+              articleSection: a.tag,
+              wordCount: a.body.reduce((n, b) => n + ("text" in b ? b.text : b.items.join(" ")).split(/\s+/).length, 0),
+              mainEntityOfPage: abs(`/articles/${a.slug}`),
+              image: DEFAULT_IMAGE,
+              author: { "@type": "Organization", name: "Меркурий", url: abs("/about") },
+              publisher: { "@id": abs("/#organization") },
+            },
+          ],
+        }
+      : { title: "Статья не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!a) return <NotFound />;
   const service = a.service ? getService(a.service) : undefined;

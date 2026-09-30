@@ -7,6 +7,7 @@ import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
 import { ADDRESSES, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
+import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
@@ -20,8 +21,21 @@ export default function AddressPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (a) document.title = `${a.street} — юридический адрес, ИФНС № ${a.ifns} | Меркурий`;
-  }, [a]);
+  }, [id]);
+
+  useSeo(
+    a
+      ? {
+          title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}, ${formatPrice(a.price)} ₽ | Меркурий`,
+          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) за ${formatPrice(a.price)} ₽ на ${a.term}. ИФНС № ${a.ifns}, метро ${a.metro}. Гарантийное письмо, не массовый адрес, документы в день обращения.`,
+          image: getPhoto(a),
+          schema: [
+            breadcrumbs([["База адресов", "/#catalog"], [a.okrug, `/okrug/${okrugSlug(a.okrug)}`], [a.district, `/district/${districtSlug(a.district)}`], [a.street, `/address/${a.id}`]]),
+            placeSchema(a, getPhoto(a), getDescription(a)[0]),
+          ],
+        }
+      : { title: "Адрес не найден | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!a) return <NotFound />;
 

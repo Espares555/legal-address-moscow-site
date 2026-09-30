@@ -8,17 +8,9 @@ import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
 import { Address, formatPrice, getPhoto, plural } from "@/data/addresses";
 import { OKRUG_INFO, OKRUG_LIST, getOkrugBySlug, getOkrugDescription } from "@/data/okrugs";
+import { addressListSchema, breadcrumbs, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 
-const setMeta = (name: string, content: string) => {
-  let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.name = name;
-    document.head.appendChild(el);
-  }
-  el.content = content;
-};
 
 export default function OkrugPage() {
   const { slug = "" } = useParams();
@@ -29,15 +21,20 @@ export default function OkrugPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!o) return;
-    document.title = `Юридический адрес ${o.prep} Москвы — от ${formatPrice(o.minPrice)} ₽ | Меркурий`;
-    setMeta(
-      "description",
-      `Юридические адреса ${o.prep} (${o.full}) Москвы: ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽ в районах ${o.districts.join(", ")}. Карта, ИФНС, цены.`,
-    );
-    setActive(o.addresses[0]);
+    if (o) setActive(o.addresses[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  useSeo(
+    o
+      ? {
+          title: `Юридический адрес ${o.prep} Москвы — от ${formatPrice(o.minPrice)} ₽ | Меркурий`,
+          description: `Юридические адреса ${o.prep} (${o.full}) Москвы: ${o.addresses.length} ${plural(o.addresses.length, ["адрес", "адреса", "адресов"])} от ${formatPrice(o.minPrice)} ₽ в районах ${o.districts.join(", ")}. Карта, ИФНС, цены.`,
+          image: getPhoto(o.addresses[0]),
+          schema: [breadcrumbs([["База адресов", "/#catalog"], [o.code, `/okrug/${o.slug}`]]), addressListSchema(`Юридические адреса ${o.prep}`, o.addresses)],
+        }
+      : { title: "Страница не найдена | Меркурий", description: "Страница не найдена", noindex: true },
+  );
 
   if (!o) return <NotFound />;
 

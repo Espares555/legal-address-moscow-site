@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useSeo } from "@/lib/seo";
 
 const NotFound = () => {
   const location = useLocation();
+  useSeo({ title: "Страница не найдена — 404 | Меркурий", description: "Страница не найдена. Перейдите на главную, чтобы подобрать юридический адрес в Москве.", noindex: true });
 
   useEffect(() => {
     console.error(

@@ -152,7 +152,7 @@ export default function ServicePage() {
             <p className="mt-5 max-w-md text-ink-foreground/70">Перезвоним в течение 15 минут в рабочее время, ответим на вопросы и рассчитаем точную стоимость.</p>
           </div>
           <div className="p-6 lg:p-12">
-            <RequestForm subject={s.name} dark />
+            <RequestForm subject={s.name} dark submitLabel="Отправить заявку" />
           </div>
         </section>
 

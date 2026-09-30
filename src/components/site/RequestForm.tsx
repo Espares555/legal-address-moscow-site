@@ -6,6 +6,7 @@ type Props = {
   subject?: string;
   dark?: boolean;
   onDone?: () => void;
+  submitLabel?: string;
 };
 
 type Errors = Partial<Record<"name" | "phone" | "agree", string>>;
@@ -24,7 +25,7 @@ const formatPhone = (raw: string) => {
   return out;
 };
 
-export default function RequestForm({ subject = "", dark, onDone }: Props) {
+export default function RequestForm({ subject = "", dark, onDone, submitLabel = "Подобрать адрес" }: Props) {
   const { toast } = useToast();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -103,7 +104,7 @@ export default function RequestForm({ subject = "", dark, onDone }: Props) {
       </label>
       {errors.agree && <p className="-mt-2 text-[13px] text-destructive">{errors.agree}</p>}
       <button type="submit" className="mt-2 h-12 bg-primary font-semibold text-primary-foreground transition-colors hover:bg-band-3">
-        Подобрать адрес
+        {submitLabel}
       </button>
     </form>
   );

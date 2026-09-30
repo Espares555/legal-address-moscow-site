@@ -106,7 +106,7 @@ export const ARTICLES: Article[] = [
     date: "2026-09-05",
     readTime: 5,
     color: "bg-band-4",
-    service: "registratsiya-ooo",
+    service: "otkrytie-raschetnogo-scheta",
     body: [
       { type: "p", text: "Для ООО расчётный счёт фактически обязателен: наличные расчёты между компаниями ограничены, а налоги удобнее платить безналично. ИП может работать и без счёта, но для сотрудничества с юрлицами он всё равно понадобится." },
       { type: "h2", text: "Какие документы нужны" },

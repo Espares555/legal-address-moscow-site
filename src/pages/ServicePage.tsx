@@ -141,6 +141,40 @@ export default function ServicePage() {
           </section>
         </div>
 
+        {s.partners && (
+          <section className="border-b border-line">
+            <div className="flex flex-col justify-between gap-3 border-b border-line px-6 py-8 lg:flex-row lg:items-end lg:px-12">
+              <h2 className="font-head text-[30px] font-extrabold tracking-[-0.03em]">Банки-партнёры</h2>
+              <p className="max-w-md text-muted-foreground">Работаем напрямую с банками — вы получаете специальные условия и сопровождение персонального менеджера.</p>
+            </div>
+            <div className="grid md:grid-cols-3">
+              {s.partners.map((b) => (
+                <div key={b.name} className="flex flex-col border-b border-line md:border-b-0 md:border-r md:last:border-r-0">
+                  <div className={`flex h-28 items-center justify-center ${b.color} ${b.text}`}>
+                    <span className="font-head text-[32px] font-extrabold tracking-[-0.02em]">{b.name}</span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6 lg:p-9">
+                    <ul className="flex-1 space-y-3">
+                      {b.perks.map((p) => (
+                        <li key={p} className="flex gap-3">
+                          <Icon name="Check" size={18} className="mt-0.5 flex-none text-primary" />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      onClick={() => order(`Открытие расчётного счёта: ${b.name}`)}
+                      className="mt-7 h-12 bg-ink font-semibold text-ink-foreground transition-colors hover:bg-primary"
+                    >
+                      Открыть счёт в {b.name === "Сбербанк" ? "Сбербанке" : b.name === "Альфа-Банк" ? "Альфа-Банке" : "Т-Банке"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section id="order" className="grid scroll-mt-24 border-b border-line bg-ink text-ink-foreground lg:grid-cols-[1.25fr_1fr]">
           <div className="p-6 lg:p-12">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-band-1">Заявка</span>
@@ -156,7 +190,7 @@ export default function ServicePage() {
           </div>
         </section>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5">
           {SERVICES.filter((x) => x.slug !== s.slug).map((x) => (
             <Link key={x.slug} to={`/services/${x.slug}`} className="group flex items-center gap-4 border-b border-line px-6 py-6 transition-colors hover:bg-surface sm:border-r lg:px-9">
               <span className="grid h-11 w-11 flex-none place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">

@@ -23,11 +23,11 @@ export default function Services({ onRequest }: Props) {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <div
               key={s.name}
-              className="reveal group flex flex-col border-b border-line sm:border-r xl:last:border-r-0"
+              className="reveal group flex flex-col border-b border-line sm:border-r lg:[&:nth-child(3n)]:border-r-0"
               style={{ transitionDelay: `${i * 90}ms` }}
             >
               <div className={`h-2 ${s.color}`} />

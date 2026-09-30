@@ -4,6 +4,7 @@ import Hero from "@/components/site/Hero";
 import Catalog from "@/components/site/Catalog";
 import MapSection from "@/components/site/MapSection";
 import Services from "@/components/site/Services";
+import Reviews from "@/components/site/Reviews";
 import Faq from "@/components/site/Faq";
 import Contacts from "@/components/site/Contacts";
 import Footer from "@/components/site/Footer";
@@ -30,18 +31,14 @@ const Index = () => {
   const requestAddress = (a?: Address) =>
     openRequest(a ? `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})` : "");
 
-  const search = (f: Partial<Filters>) => {
-    setFilters({ ...EMPTY_FILTERS, ...f });
-    requestAnimationFrame(() => scrollTo("catalog"));
-  };
-
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
       <Header onPick={() => openRequest()} />
-      <Hero onSearch={search} onOpenMap={() => scrollTo("map")} />
+      <Hero />
       <Catalog filters={filters} setFilters={setFilters} onRequest={requestAddress} />
       <MapSection onRequest={requestAddress} />
       <Services onRequest={(p) => openRequest(p ? `Интересует: ${p}` : "")} />
+      <Reviews />
       <Faq />
       <Contacts />
       <Footer />

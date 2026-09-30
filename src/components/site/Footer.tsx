@@ -1,3 +1,5 @@
+import { IFNS_LIST } from "@/data/ifns";
+
 export default function Footer() {
   return (
     <footer className="border-t border-line bg-topbar text-topbar-foreground">
@@ -22,6 +24,16 @@ export default function Footer() {
           <a href="/#contacts" className="hover:text-band-1">Контакты</a>
         </nav>
         <p className="text-[13px] text-topbar-foreground/50">© 2026 Меркурий. Все права защищены.</p>
+      </div>
+      <div className="border-t border-topbar-foreground/10 px-6 py-6 lg:px-14">
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Юридические адреса по инспекциям</p>
+        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {IFNS_LIST.map((n) => (
+            <a key={n} href={`/ifns/${n}`} className="hover:text-band-1">
+              ИФНС № {n}
+            </a>
+          ))}
+        </nav>
       </div>
     </footer>
   );

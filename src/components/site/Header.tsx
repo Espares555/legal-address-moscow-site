@@ -5,6 +5,7 @@ const NAV = [
   { href: "/#catalog", label: "База адресов" },
   { href: "/#map", label: "На карте" },
   { href: "/#services", label: "Услуги и цены" },
+  { href: "/#reviews", label: "Отзывы" },
   { href: "/#faq", label: "Вопросы" },
   { href: "/#contacts", label: "Контакты" },
 ];

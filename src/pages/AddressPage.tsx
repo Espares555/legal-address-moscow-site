@@ -56,7 +56,7 @@ export default function AddressPage() {
             <img src={getPhoto(a)} alt={`Здание по адресу ${a.street}`} className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute left-4 top-4 flex gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
               <span className="bg-primary px-2.5 py-1 text-primary-foreground">{a.okrug}</span>
-              <span className="bg-background px-2.5 py-1">ИФНС № {a.ifns}</span>
+              <Link to={`/ifns/${a.ifns}`} className="bg-background px-2.5 py-1 hover:text-primary">ИФНС № {a.ifns}</Link>
             </div>
           </div>
 

@@ -65,6 +65,11 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
             current={filters.okrug}
             onChange={(v) => setFilters({ ...filters, okrug: v })}
           />
+          {filters.ifns !== "all" && (
+            <Link to={`/ifns/${filters.ifns}`} className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+              Всё об инспекции ИФНС № {filters.ifns} <Icon name="ArrowRight" size={14} />
+            </Link>
+          )}
         </div>
 
         {/* filters */}
@@ -161,7 +166,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                   </Link>
                 </h3>
                 <p className="text-[13.5px] text-muted-foreground">
-                  ИФНС № {a.ifns} · м. {a.metro}
+                  <Link to={`/ifns/${a.ifns}`} className="underline-offset-2 hover:text-primary hover:underline">ИФНС № {a.ifns}</Link> · м. {a.metro}
                 </p>
                 <p className="text-[13.5px] text-muted-foreground">{a.area}</p>
                 <div className="mt-1 flex flex-wrap gap-1.5">

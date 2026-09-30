@@ -15,7 +15,7 @@ export default function Contacts() {
     <section id="contacts" ref={ref} className="scroll-mt-20 border-t border-line bg-background">
       <div className="mx-3 grid border-x border-line lg:mx-[18px] lg:grid-cols-[420px_1fr]">
         <div className="reveal border-b border-line px-6 py-14 lg:border-b-0 lg:border-r lg:py-16 lg:pl-14 lg:pr-10">
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">05 / Контакты</span>
+          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">06 / Контакты</span>
           <h2 className="mt-6 font-head text-[40px] font-extrabold leading-[1] tracking-[-0.035em] md:text-[56px]">
             Подберём
             <br />

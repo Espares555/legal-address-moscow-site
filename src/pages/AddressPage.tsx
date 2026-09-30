@@ -10,6 +10,7 @@ import { ADDRESSES, formatPrice, getAddress, getDescription, getPhoto } from "@/
 import NotFound from "./NotFound";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
+import { districtSlug } from "@/data/districts";
 
 export default function AddressPage() {
   const { id } = useParams();
@@ -66,7 +67,7 @@ export default function AddressPage() {
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Юридический адрес</span>
             <h1 className="mt-4 font-head text-[36px] font-extrabold leading-[1.02] tracking-[-0.035em] md:text-[52px]">{a.street}</h1>
             <p className="mt-3 text-muted-foreground">
-              {a.district}, {a.okrug} ·{" "}
+              <Link to={`/district/${districtSlug(a.district)}`} className="hover:text-primary hover:underline">{a.district}</Link>, {a.okrug} ·{" "}
               <Link to={`/metro/${metroSlug(a.metro)}`} className="hover:text-primary hover:underline">м. {a.metro}</Link>
             </p>
 

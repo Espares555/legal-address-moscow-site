@@ -1,6 +1,8 @@
 import { IFNS_LIST } from "@/data/ifns";
 import { OKRUG_INFO, OKRUG_LIST } from "@/data/okrugs";
 import { METRO_LIST, metroSlug } from "@/data/metro";
+import { DISTRICT_LIST, districtSlug } from "@/data/districts";
+import { SERVICES } from "@/data/services";
 
 export default function Footer() {
   return (
@@ -32,6 +34,22 @@ export default function Footer() {
         <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
           {OKRUG_LIST.map((n) => (
             <a key={n} href={`/okrug/${OKRUG_INFO[n].slug}`} className="hover:text-band-1">
+              {n}
+            </a>
+          ))}
+        </nav>
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Услуги</p>
+        <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {SERVICES.map((x) => (
+            <a key={x.slug} href={`/services/${x.slug}`} className="hover:text-band-1">
+              {x.name}
+            </a>
+          ))}
+        </nav>
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Юридические адреса по районам</p>
+        <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {DISTRICT_LIST.map((n) => (
+            <a key={n} href={`/district/${districtSlug(n)}`} className="hover:text-band-1">
               {n}
             </a>
           ))}

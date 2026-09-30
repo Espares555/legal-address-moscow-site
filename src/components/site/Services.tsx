@@ -1,38 +1,9 @@
 import Icon from "@/components/ui/icon";
 import { useReveal } from "@/hooks/use-reveal";
+import { Link } from "react-router-dom";
+import { SERVICES } from "@/data/services";
 
 type Props = { onRequest: (plan?: string) => void };
-
-const SERVICES = [
-  {
-    icon: "Building2",
-    name: "Регистрация организаций (ООО)",
-    desc: "Услуга по регистрации ООО, регистрации АО/ПАО и регистрации ИП",
-    price: "от 4 900 ₽",
-    color: "bg-band-1",
-  },
-  {
-    icon: "Mail",
-    name: "Почтовое обслуживание юридических адресов",
-    desc: "Приём, хранение и пересылка корреспонденции, сканы писем и уведомления о заказных",
-    price: "от 3 000 ₽",
-    color: "bg-band-2",
-  },
-  {
-    icon: "KeyRound",
-    name: "Первичная аренда юридического адреса",
-    desc: "Договор аренды и гарантийное письмо собственника для регистрации новой компании",
-    price: "от 8 700 ₽",
-    color: "bg-band-3",
-  },
-  {
-    icon: "RefreshCw",
-    name: "Сменить юридический адрес",
-    desc: "Подбор нового адреса, подготовка документов и подача в ФНС под ключ",
-    price: "от 6 500 ₽",
-    color: "bg-band-4",
-  },
-];
 
 export default function Services({ onRequest }: Props) {
   const ref = useReveal<HTMLElement>();
@@ -64,15 +35,25 @@ export default function Services({ onRequest }: Props) {
                 <span className="grid h-12 w-12 place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon name={s.icon} size={22} />
                 </span>
-                <h3 className="mt-6 text-[20px] font-bold leading-snug tracking-[-0.01em]">{s.name}</h3>
-                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-muted-foreground">{s.desc}</p>
+                <h3 className="mt-6 text-[20px] font-bold leading-snug tracking-[-0.01em]">
+                  <Link to={`/services/${s.slug}`} className="hover:text-primary">{s.name}</Link>
+                </h3>
+                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-muted-foreground">{s.short}</p>
                 <p className="mt-6 font-head text-[30px] font-extrabold leading-none tracking-[-0.03em]">{s.price}</p>
-                <button
-                  onClick={() => onRequest(s.name)}
-                  className="mt-6 h-12 bg-ink font-semibold text-ink-foreground transition-colors hover:bg-primary"
-                >
-                  Заказать
-                </button>
+                <div className="mt-6 grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => onRequest(s.name)}
+                    className="h-12 bg-ink font-semibold text-ink-foreground transition-colors hover:bg-primary"
+                  >
+                    Заказать
+                  </button>
+                  <Link
+                    to={`/services/${s.slug}`}
+                    className="flex h-12 items-center justify-center border border-line font-semibold transition-colors hover:border-primary hover:text-primary"
+                  >
+                    Подробнее
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

@@ -6,6 +6,7 @@ import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, 
 import ChipGroup from "./ChipGroup";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
+import { districtSlug } from "@/data/districts";
 import { useReveal } from "@/hooks/use-reveal";
 
 type Props = {
@@ -70,6 +71,11 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
           {filters.okrug !== "all" && (
             <Link to={`/okrug/${okrugSlug(filters.okrug)}`} className="mr-6 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
               Всё об округе {filters.okrug} <Icon name="ArrowRight" size={14} />
+            </Link>
+          )}
+          {filters.district !== "all" && (
+            <Link to={`/district/${districtSlug(filters.district)}`} className="mr-6 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+              Всё о районе {filters.district} <Icon name="ArrowRight" size={14} />
             </Link>
           )}
           {filters.metro !== "all" && (
@@ -170,7 +176,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                 </Link>
                 <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
                   <Link to={`/okrug/${okrugSlug(a.okrug)}`} className="bg-primary px-2 py-0.5 text-primary-foreground hover:bg-ink">{a.okrug}</Link>
-                  <span className="text-muted-foreground">{a.district}</span>
+                  <Link to={`/district/${districtSlug(a.district)}`} className="text-muted-foreground hover:text-primary">{a.district}</Link>
                 </div>
                 <h3 className="mt-2 text-[18px] font-bold leading-snug tracking-[-0.01em]">
                   <Link to={`/address/${a.id}`} className="transition-colors hover:text-primary">

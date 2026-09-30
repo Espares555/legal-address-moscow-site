@@ -1,23 +1,41 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { SERVICES } from "@/data/services";
 
 const NAV = [
-  { href: "/#catalog", label: "База адресов" },
-  { href: "/#map", label: "На карте" },
-  { href: "/#services", label: "Услуги", menu: true },
-  { href: "/#reviews", label: "Отзывы" },
-  { href: "/articles", label: "Статьи" },
-  { href: "/faq", label: "Вопросы" },
-  { href: "/#contacts", label: "Контакты" },
+  { href: "/#catalog", label: "База адресов", main: true },
+  { href: "/#services", label: "Услуги", menu: true, main: true },
+  { href: "/about", label: "О нас", main: true },
+  { href: "/#reviews", label: "Отзывы", main: true },
+  { href: "/faq", label: "Вопросы", main: true },
+  { href: "/#contacts", label: "Контакты", main: true },
+  { href: "/#map", label: "На карте", icon: "Map" },
+  { href: "/articles", label: "Статьи", icon: "BookOpen" },
 ];
+
+const EXTRA = NAV.filter((n) => !n.main);
 
 type Props = { onPick: () => void };
 
 export default function Header({ onPick }: Props) {
   const [open, setOpen] = useState(false);
   const [sub, setSub] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (window.innerWidth >= 1280 && moreRef.current && !moreRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", esc);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", esc);
+    };
+  }, [open]);
 
   return (
     <>
@@ -37,8 +55,8 @@ export default function Header({ onPick }: Props) {
             Меркурий<span className="text-primary">.</span>
           </a>
 
-          <nav className="mx-auto hidden gap-8 text-[15.5px] font-medium xl:flex">
-            {NAV.map((n) =>
+          <nav className="mx-auto hidden items-center gap-8 text-[15.5px] font-medium xl:flex">
+            {NAV.filter((n) => n.main).map((n) =>
               n.menu ? (
                 <div key={n.href} className="group relative">
                   <a href={n.href} className="inline-flex items-center gap-1 transition-colors hover:text-primary group-hover:text-primary">
@@ -71,6 +89,31 @@ export default function Header({ onPick }: Props) {
                 </a>
               ),
             )}
+            <div ref={moreRef} className="relative">
+              <button
+                aria-label="Ещё"
+                aria-expanded={open}
+                onClick={() => setOpen((v) => !v)}
+                className={`grid h-10 w-10 place-items-center border transition-colors ${open ? "border-primary bg-primary text-primary-foreground" : "border-line hover:border-primary hover:text-primary"}`}
+              >
+                <Icon name={open ? "X" : "Menu"} size={20} />
+              </button>
+              {open && (
+                <div className="animate-fade-in absolute right-0 top-full z-50 mt-4 w-[260px] border border-line bg-background shadow-xl">
+                  {EXTRA.map((n) => (
+                    <a
+                      key={n.href}
+                      href={n.href}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 border-b border-line px-5 py-3.5 font-semibold transition-colors last:border-b-0 hover:bg-surface hover:text-primary"
+                    >
+                      <Icon name={n.icon ?? "ArrowUpRight"} size={17} className="text-primary" />
+                      {n.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="ml-auto hidden items-center gap-7 text-[15.5px] font-medium md:flex xl:ml-0">

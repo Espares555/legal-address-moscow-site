@@ -13,7 +13,7 @@ export type Service = {
   steps: { title: string; text: string }[];
   prices: { name: string; price: string }[];
   docs: string[];
-  partners?: { name: string; color: string; text: string; perks: string[] }[];
+  partners?: { name: string; logo: string; color: string; perks: string[] }[];
 };
 
 export const SERVICES: Service[] = [
@@ -197,9 +197,9 @@ export const SERVICES: Service[] = [
     ],
     docs: ["Паспорт директора или ИП", "ИНН и ОГРН компании", "Устав и решение о назначении директора", "Документы по юридическому адресу"],
     partners: [
-      { name: "Сбербанк", color: "bg-[#21A038]", text: "text-white", perks: ["Крупнейшая сеть отделений", "Бесплатный тариф для старта", "Эквайринг и зарплатный проект"] },
-      { name: "Альфа-Банк", color: "bg-[#EF3124]", text: "text-white", perks: ["Открытие счёта за один день", "Удобный интернет-банк", "Выгодные тарифы для ВЭД"] },
-      { name: "Т-Банк", color: "bg-[#FFDD2D]", text: "text-[#333333]", perks: ["Полностью онлайн-обслуживание", "Бесплатные месяцы для новых клиентов", "Бухгалтерия и сервисы для бизнеса"] },
+      { name: "Сбербанк", logo: "/banks/sber.svg", color: "bg-[#21A038]", perks: ["Крупнейшая сеть отделений", "Бесплатный тариф для старта", "Эквайринг и зарплатный проект"] },
+      { name: "Альфа-Банк", logo: "/banks/alfa.svg", color: "bg-[#EF3124]", perks: ["Открытие счёта за один день", "Удобный интернет-банк", "Выгодные тарифы для ВЭД"] },
+      { name: "Т-Банк", logo: "/banks/tbank.svg", color: "bg-[#FFDD2D]", perks: ["Полностью онлайн-обслуживание", "Бесплатные месяцы для новых клиентов", "Бухгалтерия и сервисы для бизнеса"] },
     ],
   },
 ];

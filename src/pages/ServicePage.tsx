@@ -150,8 +150,9 @@ export default function ServicePage() {
             <div className="grid md:grid-cols-3">
               {s.partners.map((b) => (
                 <div key={b.name} className="flex flex-col border-b border-line md:border-b-0 md:border-r md:last:border-r-0">
-                  <div className={`flex h-28 items-center justify-center ${b.color} ${b.text}`}>
-                    <span className="font-head text-[32px] font-extrabold tracking-[-0.02em]">{b.name}</span>
+                  <div className="relative flex h-32 items-center justify-center border-b border-line bg-white px-8">
+                    <img src={b.logo} alt={b.name} loading="lazy" className="h-12 w-auto max-w-full object-contain" />
+                    <span className={`absolute inset-x-0 bottom-0 h-1.5 ${b.color}`} />
                   </div>
                   <div className="flex flex-1 flex-col p-6 lg:p-9">
                     <ul className="flex-1 space-y-3">

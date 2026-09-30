@@ -1,32 +1,10 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useReveal } from "@/hooks/use-reveal";
+import { Link } from "react-router-dom";
+import Icon from "@/components/ui/icon";
+import { FAQ_ALL } from "@/data/faq";
 
-const QA = [
-  {
-    q: "Чем юридический адрес отличается от массового?",
-    a: "Массовым налоговая считает адрес, по которому зарегистрировано много компаний. Такие адреса часто становятся причиной отказа в регистрации. Все объекты в нашей базе проверены: число компаний на адресе ограничено, собственник известен.",
-  },
-  {
-    q: "Какие документы я получу?",
-    a: "Договор аренды (или субаренды), гарантийное письмо от собственника и копию свидетельства о праве собственности. Этого достаточно для регистрации ООО или смены адреса.",
-  },
-  {
-    q: "Что будет, если налоговая откажет?",
-    a: "Если отказ связан с адресом, мы бесплатно заменим его на другой или вернём деньги полностью. Это прописано в договоре.",
-  },
-  {
-    q: "Можно ли выбрать конкретную инспекцию?",
-    a: "Да. В каталоге есть фильтр по ИФНС — выберите нужную инспекцию, и мы покажем только адреса, которые к ней относятся.",
-  },
-  {
-    q: "Как быстро можно получить документы?",
-    a: "В день обращения, если адрес свободен. Подписать договор можно в офисе, с курьером или электронно.",
-  },
-  {
-    q: "Приходит ли налоговая с проверкой?",
-    a: "Проверки бывают. Собственник подтверждает, что компания действительно арендует помещение, а при тарифе с почтой мы принимаем и передаём всю корреспонденцию.",
-  },
-];
+const QA = FAQ_ALL.slice(0, 6);
 
 export default function Faq() {
   const ref = useReveal<HTMLElement>();
@@ -43,6 +21,9 @@ export default function Faq() {
           <a href="tel:+74951234567" className="mt-4 inline-block font-head text-2xl font-extrabold hover:text-primary">
             +7 495 123-45-67
           </a>
+          <Link to="/faq" className="mt-8 flex items-center gap-2 font-semibold text-primary hover:underline">
+            Все вопросы и ответы ({FAQ_ALL.length}) <Icon name="ArrowRight" size={16} />
+          </Link>
         </div>
         <div className="reveal bg-background px-6 lg:px-14">
           <Accordion type="single" collapsible defaultValue="0">

@@ -23,7 +23,8 @@ export default function Footer() {
           <a href="/#catalog" className="hover:text-band-1">База адресов</a>
           <a href="/#map" className="hover:text-band-1">На карте</a>
           <a href="/#services" className="hover:text-band-1">Услуги</a>
-          <a href="/#faq" className="hover:text-band-1">Вопросы</a>
+          <a href="/articles" className="hover:text-band-1">Статьи</a>
+          <a href="/faq" className="hover:text-band-1">Вопросы и ответы</a>
           <a href="/#contacts" className="hover:text-band-1">Контакты</a>
         </nav>
         <p className="text-[13px] text-topbar-foreground/50">© 2026 Меркурий. Все права защищены.</p>

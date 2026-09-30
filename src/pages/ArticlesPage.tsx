@@ -39,7 +39,7 @@ export default function ArticlesPage() {
             <p className="max-w-[340px] text-muted-foreground">Разбираем регистрацию компаний, выбор юридического адреса и общение с налоговой простым языком.</p>
           </div>
         </header>
-        <div className="grid sm:grid-cols-2">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {ARTICLES.map((a) => (
             <ArticleCard key={a.slug} a={a} />
           ))}

@@ -6,6 +6,7 @@ import MapSection from "@/components/site/MapSection";
 import Services from "@/components/site/Services";
 import Reviews from "@/components/site/Reviews";
 import ArticlesSection from "@/components/site/ArticlesSection";
+import BankPartners from "@/components/site/BankPartners";
 import Faq from "@/components/site/Faq";
 import Contacts from "@/components/site/Contacts";
 import Footer from "@/components/site/Footer";
@@ -39,6 +40,7 @@ const Index = () => {
       <Catalog filters={filters} setFilters={setFilters} onRequest={requestAddress} />
       <MapSection />
       <Services onRequest={(p) => openRequest(p ? `Интересует: ${p}` : "")} />
+      <BankPartners />
       <Reviews />
       <ArticlesSection />
       <Faq />

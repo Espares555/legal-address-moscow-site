@@ -23,19 +23,19 @@ export default function Services({ onRequest }: Props) {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {SERVICES.map((s, i) => (
             <div
               key={s.name}
-              className="reveal group flex flex-col border-b border-line sm:border-r lg:last:border-r-0"
+              className="reveal group flex flex-col border-b border-line sm:border-r xl:last:border-r-0"
               style={{ transitionDelay: `${i * 90}ms` }}
             >
               <div className={`h-2 ${s.color}`} />
-              <div className="flex flex-1 flex-col p-6 lg:p-9">
+              <div className="flex flex-1 flex-col p-6 lg:p-8">
                 <span className="grid h-12 w-12 place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon name={s.icon} size={22} />
                 </span>
-                <h3 className="mt-6 text-[20px] font-bold leading-snug tracking-[-0.01em]">
+                <h3 className="mt-6 text-[19px] font-bold leading-snug tracking-[-0.01em]">
                   <Link to={`/services/${s.slug}`} className="hover:text-primary">{s.name}</Link>
                 </h3>
                 <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-muted-foreground">{s.short}</p>

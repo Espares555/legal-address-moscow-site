@@ -156,7 +156,7 @@ export default function ServicePage() {
           </div>
         </section>
 
-        <div className="grid sm:grid-cols-3">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4">
           {SERVICES.filter((x) => x.slug !== s.slug).map((x) => (
             <Link key={x.slug} to={`/services/${x.slug}`} className="group flex items-center gap-4 border-b border-line px-6 py-6 transition-colors hover:bg-surface sm:border-r lg:px-9">
               <span className="grid h-11 w-11 flex-none place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">

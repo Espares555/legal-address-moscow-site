@@ -20,6 +20,7 @@ export default function Footer() {
           <p className="mt-2 max-w-sm text-topbar-foreground/60">База юридических адресов Москвы для регистрации и смены юрадреса.</p>
         </div>
         <nav className="flex flex-wrap gap-x-8 gap-y-3 font-medium text-topbar-foreground/80">
+          <a href="/about" className="hover:text-band-1">О компании</a>
           <a href="/#catalog" className="hover:text-band-1">База адресов</a>
           <a href="/#map" className="hover:text-band-1">На карте</a>
           <a href="/#services" className="hover:text-band-1">Услуги</a>

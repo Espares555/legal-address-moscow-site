@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import Icon from "@/components/ui/icon";
 import { ADDRESSES } from "@/data/addresses";
 
 export default function Hero() {
@@ -9,10 +11,13 @@ export default function Hero() {
       {/* lead */}
       <div className="border-line px-6 pt-8 lg:border-r lg:pb-16 lg:pl-14 lg:pr-0 lg:pt-[58px]">
         <p className="text-[20px] leading-[1.35] tracking-[-0.01em] text-muted-foreground lg:text-[24px]">
-          <b className="font-bold text-foreground/80">Ищите</b> по ИФНС и округу
-          <br />
-          <b className="font-bold text-foreground/80">Ищите</b> по району и метро
+          <b className="font-bold text-foreground/80">Держим репутацию</b>
+          <br />с 1993 года
         </p>
+        <Link to="/about" className="group mt-5 inline-flex items-center gap-2 font-semibold text-primary">
+          Подробнее о компании
+          <Icon name="ArrowRight" size={16} className="transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
 
       {/* head */}

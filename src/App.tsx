@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AddressPage from "./pages/AddressPage";
 import IfnsPage from "./pages/IfnsPage";
 import OkrugPage from "./pages/OkrugPage";
+import MetroPage from "./pages/MetroPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/address/:id" element={<AddressPage />} />
           <Route path="/ifns/:num" element={<IfnsPage />} />
           <Route path="/okrug/:slug" element={<OkrugPage />} />
+          <Route path="/metro/:slug" element={<MetroPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

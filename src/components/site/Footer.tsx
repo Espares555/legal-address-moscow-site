@@ -1,5 +1,6 @@
 import { IFNS_LIST } from "@/data/ifns";
 import { OKRUG_INFO, OKRUG_LIST } from "@/data/okrugs";
+import { METRO_LIST, metroSlug } from "@/data/metro";
 
 export default function Footer() {
   return (
@@ -32,6 +33,14 @@ export default function Footer() {
           {OKRUG_LIST.map((n) => (
             <a key={n} href={`/okrug/${OKRUG_INFO[n].slug}`} className="hover:text-band-1">
               {n}
+            </a>
+          ))}
+        </nav>
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-topbar-foreground/50">Юридические адреса у метро</p>
+        <nav className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-topbar-foreground/70">
+          {METRO_LIST.map((n) => (
+            <a key={n} href={`/metro/${metroSlug(n)}`} className="hover:text-band-1">
+              м. {n}
             </a>
           ))}
         </nav>

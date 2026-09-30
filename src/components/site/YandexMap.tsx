@@ -33,12 +33,13 @@ type Props = {
   onSelect?: (a: Address) => void;
   zoom?: number;
   className?: string;
+  noBalloon?: boolean;
 };
 
 const PRIMARY = "#6a3fe0";
 const INK = "#141414";
 
-export default function YandexMap({ addresses, activeId, onSelect, zoom, className }: Props) {
+export default function YandexMap({ addresses, activeId, onSelect, zoom, className, noBalloon }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const placemarks = useRef<Map<number, any>>(new Map());
@@ -83,7 +84,7 @@ export default function YandexMap({ addresses, activeId, onSelect, zoom, classNa
           balloonContentBody: `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>${formatPrice(a.price)} ₽</b> / ${a.term}`,
           balloonContentFooter: `<a href="/address/${a.id}" style="color:${PRIMARY};font-weight:600">Подробнее об адресе →</a>`,
         },
-        { preset: "islands#circleDotIcon", iconColor: a.id === activeId ? INK : PRIMARY },
+        { preset: "islands#circleDotIcon", iconColor: a.id === activeId ? INK : PRIMARY, openBalloonOnClick: !noBalloon, cursor: "pointer" },
       );
       pm.events.add("click", () => onSelectRef.current?.(a));
       map.current.geoObjects.add(pm);

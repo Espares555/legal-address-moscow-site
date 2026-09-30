@@ -36,7 +36,7 @@ const Index = () => {
       <Header onPick={() => openRequest()} />
       <Hero />
       <Catalog filters={filters} setFilters={setFilters} onRequest={requestAddress} />
-      <MapSection onRequest={requestAddress} />
+      <MapSection />
       <Services onRequest={(p) => openRequest(p ? `Интересует: ${p}` : "")} />
       <Reviews />
       <Faq />

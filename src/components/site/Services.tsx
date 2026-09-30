@@ -3,36 +3,35 @@ import { useReveal } from "@/hooks/use-reveal";
 
 type Props = { onRequest: (plan?: string) => void };
 
-const PLANS = [
+const SERVICES = [
   {
-    name: "Адрес",
-    price: "от 8 700 ₽",
-    term: "за 11 месяцев",
+    icon: "Building2",
+    name: "Регистрация организаций (ООО)",
+    desc: "Услуга по регистрации ООО, регистрации АО/ПАО и регистрации ИП",
+    price: "от 4 900 ₽",
     color: "bg-band-1",
-    items: ["Договор аренды и гарантийное письмо", "Адрес без массовой регистрации", "Подтверждение для ФНС"],
   },
   {
-    name: "Адрес + почта",
-    price: "от 12 900 ₽",
-    term: "за 11 месяцев",
+    icon: "Mail",
+    name: "Почтовое обслуживание юридических адресов",
+    desc: "Приём, хранение и пересылка корреспонденции, сканы писем и уведомления о заказных",
+    price: "от 3 000 ₽",
     color: "bg-band-2",
-    featured: true,
-    items: ["Всё из тарифа «Адрес»", "Приём и хранение корреспонденции", "Сканы писем в мессенджер", "Уведомление о заказных"],
   },
   {
-    name: "Офис под ключ",
-    price: "от 19 800 ₽",
-    term: "за 11 месяцев",
-    color: "bg-band-4",
-    items: ["Всё из тарифа «Адрес + почта»", "Секретарь и ответы на звонки", "Переговорная 4 часа в месяц", "Рабочее место по запросу"],
+    icon: "KeyRound",
+    name: "Первичная аренда юридического адреса",
+    desc: "Договор аренды и гарантийное письмо собственника для регистрации новой компании",
+    price: "от 8 700 ₽",
+    color: "bg-band-3",
   },
-];
-
-const EXTRA = [
-  { icon: "FileText", title: "Регистрация ООО", price: "от 4 900 ₽" },
-  { icon: "RefreshCw", title: "Смена юрадреса", price: "от 6 500 ₽" },
-  { icon: "ShieldCheck", title: "Проверка адреса", price: "бесплатно" },
-  { icon: "Truck", title: "Доставка документов", price: "от 700 ₽" },
+  {
+    icon: "RefreshCw",
+    name: "Сменить юридический адрес",
+    desc: "Подбор нового адреса, подготовка документов и подача в ФНС под ключ",
+    price: "от 6 500 ₽",
+    color: "bg-band-4",
+  },
 ];
 
 export default function Services({ onRequest }: Props) {
@@ -53,55 +52,29 @@ export default function Services({ onRequest }: Props) {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3">
-          {PLANS.map((p, i) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+          {SERVICES.map((s, i) => (
             <div
-              key={p.name}
-              className={`reveal relative flex flex-col border-b border-line lg:border-r lg:last:border-r-0 ${p.featured ? "bg-ink text-ink-foreground" : ""}`}
+              key={s.name}
+              className="reveal group flex flex-col border-b border-line sm:border-r lg:last:border-r-0"
               style={{ transitionDelay: `${i * 90}ms` }}
             >
-              <div className={`h-[52px] ${p.color} flex items-center gap-4 px-6 text-white lg:px-9`}>
-                <span className="h-5 w-5 rounded-full border-[3px] border-white" />
-                <span className="font-bold">{p.name}</span>
-                {p.featured && <span className="ml-auto bg-white px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-band-4">Хит</span>}
-              </div>
+              <div className={`h-2 ${s.color}`} />
               <div className="flex flex-1 flex-col p-6 lg:p-9">
-                <p className="font-head text-[44px] font-extrabold leading-none tracking-[-0.035em]">{p.price}</p>
-                <p className={`mt-2 ${p.featured ? "text-ink-foreground/60" : "text-muted-foreground"}`}>{p.term}</p>
-                <ul className="mt-8 space-y-3">
-                  {p.items.map((it) => (
-                    <li key={it} className="flex gap-3">
-                      <Icon name="Check" size={18} className="mt-0.5 flex-none text-band-1" />
-                      <span>{it}</span>
-                    </li>
-                  ))}
-                </ul>
+                <span className="grid h-12 w-12 place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon name={s.icon} size={22} />
+                </span>
+                <h3 className="mt-6 text-[20px] font-bold leading-snug tracking-[-0.01em]">{s.name}</h3>
+                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-muted-foreground">{s.desc}</p>
+                <p className="mt-6 font-head text-[30px] font-extrabold leading-none tracking-[-0.03em]">{s.price}</p>
                 <button
-                  onClick={() => onRequest(p.name)}
-                  className={`mt-10 h-12 font-semibold transition-colors ${p.featured ? "bg-primary text-primary-foreground hover:bg-band-1" : "bg-ink text-ink-foreground hover:bg-primary"}`}
+                  onClick={() => onRequest(s.name)}
+                  className="mt-6 h-12 bg-ink font-semibold text-ink-foreground transition-colors hover:bg-primary"
                 >
-                  Выбрать тариф
+                  Заказать
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4">
-          {EXTRA.map((e) => (
-            <button
-              key={e.title}
-              onClick={() => onRequest(e.title)}
-              className="group flex items-center gap-4 border-b border-line px-6 py-6 text-left transition-colors hover:bg-surface sm:border-r lg:px-9"
-            >
-              <span className="grid h-11 w-11 flex-none place-items-center bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <Icon name={e.icon} size={20} />
-              </span>
-              <span>
-                <span className="block font-bold">{e.title}</span>
-                <span className="text-[13.5px] text-muted-foreground">{e.price}</span>
-              </span>
-            </button>
           ))}
         </div>
       </div>

@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
 import ChipGroup from "./ChipGroup";
 import { okrugSlug } from "@/data/okrugs";
+import { metroSlug } from "@/data/metro";
 import { useReveal } from "@/hooks/use-reveal";
 
 type Props = {
@@ -16,12 +17,14 @@ type Props = {
 type Sort = "price-asc" | "price-desc" | "ifns";
 
 const FIELDS: { key: keyof Omit<Filters, "query">; label: string; all: string; fmt?: (v: string) => string }[] = [
-  { key: "district", label: "Район", all: "Все районы" },
   { key: "metro", label: "Метро", all: "Все станции", fmt: (v) => `м. ${v}` },
 ];
 
 export default function Catalog({ filters, setFilters, onRequest }: Props) {
   const [sort, setSort] = useState<Sort>("price-asc");
+  const [limit, setLimit] = useState(8);
+
+  useEffect(() => setLimit(8), [filters]);
   const ref = useReveal<HTMLElement>();
 
   const list = useMemo(() => {
@@ -30,6 +33,14 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
       sort === "price-asc" ? a.price - b.price : sort === "price-desc" ? b.price - a.price : Number(a.ifns) - Number(b.ifns),
     );
   }, [filters, sort]);
+
+  const districts = useMemo(
+    () =>
+      Array.from(new Set(ADDRESSES.filter((a) => filters.okrug === "all" || a.okrug === filters.okrug).map((a) => a.district))).sort((a, b) =>
+        a.localeCompare(b, "ru"),
+      ),
+    [filters.okrug],
+  );
 
   const active = Object.entries(filters).filter(([k, v]) => (k === "query" ? v : v !== "all")).length;
 
@@ -48,11 +59,22 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
             title="Выбор по округам"
             values={uniq("okrug")}
             current={filters.okrug}
-            onChange={(v) => setFilters({ ...filters, okrug: v })}
+            onChange={(v) => setFilters({ ...filters, okrug: v, district: "all" })}
+          />
+          <ChipGroup
+            title="Выбор по районам"
+            values={districts}
+            current={filters.district}
+            onChange={(v) => setFilters({ ...filters, district: v })}
           />
           {filters.okrug !== "all" && (
             <Link to={`/okrug/${okrugSlug(filters.okrug)}`} className="mr-6 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
               Всё об округе {filters.okrug} <Icon name="ArrowRight" size={14} />
+            </Link>
+          )}
+          {filters.metro !== "all" && (
+            <Link to={`/metro/${metroSlug(filters.metro)}`} className="mr-6 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+              Адреса у метро {filters.metro} <Icon name="ArrowRight" size={14} />
             </Link>
           )}
           {filters.ifns !== "all" && (
@@ -63,7 +85,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
         </div>
 
         {/* filters */}
-        <div className="grid gap-px border-b border-line bg-line sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(2,1fr)_auto]">
+        <div className="grid gap-px border-b border-line bg-line sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_auto]">
           <label className="flex h-16 items-center gap-3 bg-surface px-6">
             <Icon name="Search" size={18} className="text-muted-foreground" />
             <input
@@ -138,7 +160,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4">
-            {list.map((a) => (
+            {list.slice(0, limit).map((a) => (
               <article
                 key={a.id}
                 className="group relative flex flex-col gap-2 border-b border-line px-6 py-7 transition-colors hover:bg-surface sm:border-r lg:px-9"
@@ -156,11 +178,11 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                   </Link>
                 </h3>
                 <p className="text-[13.5px] text-muted-foreground">
-                  <Link to={`/ifns/${a.ifns}`} className="underline-offset-2 hover:text-primary hover:underline">ИФНС № {a.ifns}</Link> · м. {a.metro}
+                  <Link to={`/ifns/${a.ifns}`} className="underline-offset-2 hover:text-primary hover:underline">ИФНС № {a.ifns}</Link> ·{" "}
+                  <Link to={`/metro/${metroSlug(a.metro)}`} className="underline-offset-2 hover:text-primary hover:underline">м. {a.metro}</Link>
                 </p>
-                <p className="text-[13.5px] text-muted-foreground">{a.area}</p>
                 <div className="mt-1 flex flex-wrap gap-1.5">
-                  {a.tags.map((t) => (
+                  {a.tags.filter((t) => t === "Почта").map((t) => (
                     <span key={t} className="border border-line bg-background px-2 py-0.5 text-[12px] font-medium">
                       {t}
                     </span>
@@ -182,6 +204,15 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
               </article>
             ))}
           </div>
+        )}
+        {list.length > limit && (
+          <button
+            onClick={() => setLimit((l) => l + 8)}
+            className="flex h-16 w-full items-center justify-center gap-2 border-b border-line font-semibold transition-colors hover:bg-surface hover:text-primary"
+          >
+            Показать ещё (осталось {list.length - limit})
+            <Icon name="ChevronDown" size={18} />
+          </button>
         )}
       </div>
     </section>

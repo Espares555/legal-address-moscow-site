@@ -1,20 +1,52 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { SERVICES } from "@/data/services";
 
-const NAV = [
-  { href: "/#catalog", label: "База адресов", main: true },
-  { href: "/#services", label: "Услуги", menu: true, main: true },
-  { href: "/about", label: "О нас", main: true },
-  { href: "/#reviews", label: "Отзывы", main: true },
-  { href: "/faq", label: "Вопросы", main: true },
-  { href: "/#contacts", label: "Контакты", main: true },
-  { href: "/#map", label: "На карте", icon: "Map" },
-  { href: "/articles", label: "Статьи", icon: "BookOpen" },
+type NavItem = { href: string; label: string; main?: boolean; menu?: boolean; icon?: string; section?: string; paths?: string[]; noBurger?: boolean };
+
+const NAV: NavItem[] = [
+  { href: "/#catalog", label: "База адресов", main: true, section: "catalog", paths: ["/address", "/ifns", "/okrug", "/district", "/metro"] },
+  { href: "/#services", label: "Услуги", menu: true, main: true, section: "services", paths: ["/services"] },
+  { href: "/about", label: "О нас", main: true, paths: ["/about"] },
+  { href: "/#reviews", label: "Отзывы", main: true, section: "reviews" },
+  { href: "/faq", label: "Вопросы", main: true, section: "faq", paths: ["/faq"], noBurger: true },
+  { href: "/#contacts", label: "Контакты", main: true, section: "contacts" },
+  { href: "/#map", label: "На карте", icon: "Map", section: "map" },
+  { href: "/articles", label: "Статьи", icon: "BookOpen", section: "articles", paths: ["/articles"] },
 ];
 
 const EXTRA = NAV.filter((n) => !n.main);
+const SECTIONS = NAV.map((n) => n.section).filter(Boolean) as string[];
+
+function useActive() {
+  const { pathname } = useLocation();
+  const [section, setSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setSection(null);
+      return;
+    }
+    const onScroll = () => {
+      const line = window.innerHeight * 0.35;
+      let cur: string | null = null;
+      for (const id of SECTIONS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.top <= line && r.bottom > line) cur = id;
+      }
+      setSection(cur);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [pathname]);
+
+  return (n: NavItem) =>
+    pathname === "/" ? !!n.section && n.section === section : !!n.paths?.some((p) => pathname === p || pathname.startsWith(p + "/"));
+}
 
 type Props = { onPick: () => void };
 
@@ -22,6 +54,9 @@ export default function Header({ onPick }: Props) {
   const [open, setOpen] = useState(false);
   const [sub, setSub] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const isActive = useActive();
+  const { pathname } = useLocation();
+  const extraActive = EXTRA.some(isActive);
 
   useEffect(() => {
     if (!open) return;
@@ -59,7 +94,11 @@ export default function Header({ onPick }: Props) {
             {NAV.filter((n) => n.main).map((n) =>
               n.menu ? (
                 <div key={n.href} className="group relative">
-                  <a href={n.href} className="inline-flex items-center gap-1 transition-colors hover:text-primary group-hover:text-primary">
+                  <a
+                    href={n.href}
+                    aria-current={isActive(n) ? "page" : undefined}
+                    className={`relative inline-flex items-center gap-1 transition-colors hover:text-primary group-hover:text-primary after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:bg-primary after:transition-all ${isActive(n) ? "text-primary after:w-full" : "after:w-0"}`}
+                  >
                     {n.label}
                     <Icon name="ChevronDown" size={15} className="transition-transform group-hover:rotate-180" />
                   </a>
@@ -69,7 +108,7 @@ export default function Header({ onPick }: Props) {
                         <Link
                           key={s.slug}
                           to={`/services/${s.slug}`}
-                          className="group/item flex items-center gap-3.5 border-b border-line px-5 py-3.5 transition-colors last:border-b-0 hover:bg-surface"
+                          className={`group/item flex items-center gap-3.5 border-b border-line px-5 py-3.5 transition-colors last:border-b-0 hover:bg-surface ${pathname === `/services/${s.slug}` ? "bg-surface" : ""}`}
                         >
                           <span className="grid h-9 w-9 flex-none place-items-center bg-surface text-primary transition-colors group-hover/item:bg-primary group-hover/item:text-primary-foreground">
                             <Icon name={s.icon} size={17} />
@@ -84,7 +123,12 @@ export default function Header({ onPick }: Props) {
                   </div>
                 </div>
               ) : (
-                <a key={n.href} href={n.href} className="relative transition-colors hover:text-primary after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
+                <a
+                  key={n.href}
+                  href={n.href}
+                  aria-current={isActive(n) ? "page" : undefined}
+                  className={`relative transition-colors hover:text-primary after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:bg-primary after:transition-all hover:after:w-full ${isActive(n) ? "text-primary after:w-full" : "after:w-0"}`}
+                >
                   {n.label}
                 </a>
               ),
@@ -94,9 +138,10 @@ export default function Header({ onPick }: Props) {
                 aria-label="Ещё"
                 aria-expanded={open}
                 onClick={() => setOpen((v) => !v)}
-                className={`grid h-10 w-10 place-items-center border transition-colors ${open ? "border-primary bg-primary text-primary-foreground" : "border-line hover:border-primary hover:text-primary"}`}
+                className={`relative grid h-10 w-10 place-items-center border transition-colors ${open ? "border-primary bg-primary text-primary-foreground" : extraActive ? "border-primary text-primary" : "border-line hover:border-primary hover:text-primary"}`}
               >
                 <Icon name={open ? "X" : "Menu"} size={20} />
+                {extraActive && !open && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-primary" />}
               </button>
               {open && (
                 <div className="animate-fade-in absolute right-0 top-full z-50 mt-4 w-[260px] border border-line bg-background shadow-xl">
@@ -105,7 +150,8 @@ export default function Header({ onPick }: Props) {
                       key={n.href}
                       href={n.href}
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 border-b border-line px-5 py-3.5 font-semibold transition-colors last:border-b-0 hover:bg-surface hover:text-primary"
+                      aria-current={isActive(n) ? "page" : undefined}
+                      className={`flex items-center gap-3 border-b border-l-[3px] border-b-line px-5 py-3.5 font-semibold transition-colors last:border-b-0 hover:bg-surface hover:text-primary ${isActive(n) ? "border-l-primary bg-surface text-primary" : "border-l-transparent"}`}
                     >
                       <Icon name={n.icon ?? "ArrowUpRight"} size={17} className="text-primary" />
                       {n.label}
@@ -140,17 +186,17 @@ export default function Header({ onPick }: Props) {
         {open && (
           <div className="animate-fade-in border-t border-line bg-background px-5 pb-6 xl:hidden">
             <nav className="flex flex-col">
-              {NAV.map((n) =>
+              {NAV.filter((n) => !n.noBurger).map((n) =>
                 n.menu ? (
                   <div key={n.href} className="border-b border-line">
-                    <button onClick={() => setSub((v) => !v)} className="flex w-full items-center justify-between py-4 font-head text-xl font-bold">
+                    <button onClick={() => setSub((v) => !v)} className={`flex w-full items-center justify-between py-4 font-head text-xl font-bold ${isActive(n) ? "text-primary" : ""}`}>
                       {n.label}
                       <Icon name="ChevronDown" size={20} className={`text-primary transition-transform ${sub ? "rotate-180" : ""}`} />
                     </button>
                     {sub && (
                       <div className="flex flex-col pb-3">
                         {SERVICES.map((s) => (
-                          <Link key={s.slug} to={`/services/${s.slug}`} onClick={() => setOpen(false)} className="flex items-center gap-3 py-2.5 font-medium">
+                          <Link key={s.slug} to={`/services/${s.slug}`} onClick={() => setOpen(false)} className={`flex items-center gap-3 py-2.5 font-medium ${pathname === `/services/${s.slug}` ? "text-primary" : ""}`}>
                             <Icon name={s.icon} size={17} className="text-primary" />
                             {s.name}
                           </Link>
@@ -163,7 +209,8 @@ export default function Header({ onPick }: Props) {
                   key={n.href}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-between border-b border-line py-4 font-head text-xl font-bold"
+                  aria-current={isActive(n) ? "page" : undefined}
+                  className={`flex items-center justify-between border-b border-line py-4 font-head text-xl font-bold ${isActive(n) ? "text-primary" : ""}`}
                 >
                   {n.label}
                   <Icon name="ArrowUpRight" size={18} className="text-primary" />

@@ -9,6 +9,32 @@ import { ADDRESSES } from "@/data/addresses";
 import { SERVICES } from "@/data/services";
 import { setMeta } from "@/lib/meta";
 
+const CDN = "https://cdn.poehali.dev/projects/59523c27-a9b3-49d8-adc5-d0bc3334a737/files/";
+
+const GALLERY = [
+  { src: CDN + "240195ce-b572-45d2-b62d-ebd95f9fd17e.jpg", alt: "Команда юристов компании «Меркурий»", cls: "sm:col-span-2 sm:row-span-2" },
+  { src: CDN + "e067d51d-9edb-4e13-baa4-bf982435e624.jpg", alt: "Ресепшн офиса «Меркурий»", cls: "" },
+  { src: CDN + "11e5eb1a-63f9-4f49-96d9-5f16663fb70b.jpg", alt: "Руководитель компании", cls: "" },
+  { src: CDN + "a015f926-3270-4def-81a3-5b7242f71929.jpg", alt: "Юрист передаёт документы клиенту", cls: "" },
+  { src: CDN + "6fe682a1-e24a-47c8-8d37-82e6454ca695.jpg", alt: "Рабочее пространство офиса", cls: "" },
+  { src: CDN + "a5191a1e-233d-40cb-a542-1df48892b1c3.jpg", alt: "Переговорная комната", cls: "sm:col-span-4" },
+];
+
+const REQUISITES: [string, string][] = [
+  ["Полное наименование", "Общество с ограниченной ответственностью «Меркурий»"],
+  ["Сокращённое наименование", "ООО «Меркурий»"],
+  ["Дата регистрации", "1993 год"],
+  ["ИНН", "7700000000"],
+  ["КПП", "770001001"],
+  ["ОГРН", "1027700000000"],
+  ["Юридический адрес", "125009, г. Москва, ул. Тверская, д. 18, корп. 1"],
+  ["Генеральный директор", "Иванов Иван Иванович"],
+  ["Расчётный счёт", "40702810000000000000"],
+  ["Банк", "ПАО Сбербанк, г. Москва"],
+  ["БИК", "044525225"],
+  ["Корр. счёт", "30101810400000000225"],
+];
+
 const YEARS = new Date().getFullYear() - 1993;
 
 const STATS: [string, string][] = [
@@ -34,6 +60,14 @@ const TIMELINE = [
 
 export default function AboutPage() {
   const [dialog, setDialog] = useState(false);
+  const [photo, setPhoto] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyRequisites = () => {
+    navigator.clipboard.writeText(REQUISITES.map(([k, v]) => `${k}: ${v}`).join("\n"));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,6 +151,45 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <section className="border-b border-line">
+          <div className="flex flex-col justify-between gap-3 border-b border-line px-6 py-8 lg:flex-row lg:items-end lg:px-14">
+            <h2 className="font-head text-[30px] font-extrabold tracking-[-0.03em]">Офис и команда</h2>
+            <p className="max-w-md text-muted-foreground">Приезжайте в гости — подпишем документы, ответим на вопросы и угостим кофе.</p>
+          </div>
+          <div className="grid auto-rows-[220px] gap-px bg-line sm:grid-cols-4 lg:auto-rows-[260px]">
+            {GALLERY.map((g, i) => (
+              <button key={g.src} onClick={() => setPhoto(i)} className={`group relative overflow-hidden bg-background ${g.cls}`} aria-label={g.alt}>
+                <img src={g.src} alt={g.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <span className="absolute inset-x-0 bottom-0 translate-y-full bg-ink/80 px-4 py-2.5 text-left text-[13.5px] font-medium text-ink-foreground transition-transform group-hover:translate-y-0">
+                  {g.alt}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section id="requisites" className="grid scroll-mt-24 border-b border-line lg:grid-cols-[420px_1fr]">
+          <div className="px-6 pt-10 lg:border-r lg:border-line lg:py-12 lg:pl-14 lg:pr-10">
+            <h2 className="font-head text-[30px] font-extrabold tracking-[-0.03em]">Реквизиты</h2>
+            <p className="mt-3 text-muted-foreground">Компания зарегистрирована и работает с 1993 года.</p>
+            <button
+              onClick={copyRequisites}
+              className="mt-6 inline-flex h-11 items-center gap-2 bg-ink px-5 font-semibold text-ink-foreground transition-colors hover:bg-primary"
+            >
+              <Icon name={copied ? "Check" : "Copy"} size={16} />
+              {copied ? "Скопировано" : "Скопировать реквизиты"}
+            </button>
+          </div>
+          <dl className="px-6 py-6 lg:px-14 lg:py-10">
+            {REQUISITES.map(([k, v]) => (
+              <div key={k} className="grid gap-1 border-b border-line py-3.5 last:border-b-0 sm:grid-cols-[220px_1fr] sm:gap-6">
+                <dt className="text-[14px] text-muted-foreground">{k}</dt>
+                <dd className="font-medium">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
         <section className="border-b border-line bg-surface px-6 py-10 lg:px-14">
           <h2 className="mb-5 text-[19px] font-semibold">Чем мы можем помочь</h2>
           <div className="flex flex-wrap gap-2.5">
@@ -150,6 +223,37 @@ export default function AboutPage() {
       </div>
       <Footer />
       <RequestDialog open={dialog} onOpenChange={setDialog} subject="" />
+      {photo !== null && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/90 p-4" onClick={() => setPhoto(null)}>
+          <button aria-label="Закрыть" className="absolute right-4 top-4 grid h-11 w-11 place-items-center bg-white/10 text-white hover:bg-white/20">
+            <Icon name="X" size={22} />
+          </button>
+          <button
+            aria-label="Назад"
+            onClick={(e) => {
+              e.stopPropagation();
+              setPhoto((photo + GALLERY.length - 1) % GALLERY.length);
+            }}
+            className="absolute left-4 grid h-11 w-11 place-items-center bg-white/10 text-white hover:bg-white/20"
+          >
+            <Icon name="ChevronLeft" size={22} />
+          </button>
+          <figure className="max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+            <img src={GALLERY[photo].src} alt={GALLERY[photo].alt} className="max-h-[80vh] w-auto object-contain" />
+            <figcaption className="mt-3 text-center text-white/80">{GALLERY[photo].alt}</figcaption>
+          </figure>
+          <button
+            aria-label="Вперёд"
+            onClick={(e) => {
+              e.stopPropagation();
+              setPhoto((photo + 1) % GALLERY.length);
+            }}
+            className="absolute right-4 grid h-11 w-11 place-items-center bg-white/10 text-white hover:bg-white/20"
+          >
+            <Icon name="ChevronRight" size={22} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

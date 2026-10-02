@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
+import CompactExtras from "@/components/site/CompactExtras";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
@@ -170,6 +171,8 @@ export default function OkrugPage() {
             ))}
           </div>
         </div>
+
+        <CompactExtras />
       </div>
 
       <Footer />

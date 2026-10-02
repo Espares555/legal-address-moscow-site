@@ -16,6 +16,9 @@ export type Address = {
   lng: number;
 };
 
+export const MAIL_PRICE = 700;
+export const MAIL_MONTHS = 11;
+
 export type AddressPrices = { create: number; inside: number; outside: number };
 
 export const PRICE_LABELS: { key: keyof AddressPrices; label: string; hint: string }[] = [
@@ -103,7 +106,7 @@ export const getPhoto = (a: Address) => {
 export const getDescription = (a: Address) => [
   `Юридический адрес по адресу ${a.street} (${a.district}, ${a.okrug}) — объект «${a.area}» в нескольких минутах пешком от станции метро «${a.metro}». Адрес закреплён за ИФНС № ${a.ifns}, регистрация проходит без выездов в инспекцию.`,
   `Собственник предоставляет гарантийное письмо и договор аренды на ${a.term}, помещение реально существует и готово к проверке налоговой. Адрес не является массовым — в нём зарегистрировано ограниченное число компаний.`,
-  `В стоимость входят: ${a.tags.map((t) => t.toLowerCase()).join(", ")}, подтверждение присутствия при визите ФНС и поддержка менеджера на весь срок договора.`,
+  `В стоимость входят ${[...a.tags.filter((t) => t !== "Почта").map((t) => t.toLowerCase()), "подтверждение присутствия при визите ФНС", "поддержка менеджера на весь срок договора"].join(", ")}. Почтовое обслуживание в стоимость не входит — его можно подключить отдельно за ${MAIL_PRICE} ₽ в месяц.`,
 ];
 
 export const getAddress = (id: number) => ADDRESSES.find((a) => a.id === id);

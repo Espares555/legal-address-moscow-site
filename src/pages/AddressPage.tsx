@@ -6,7 +6,7 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
-import { ADDRESSES, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
+import { ADDRESSES, MAIL_MONTHS, MAIL_PRICE, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 import { okrugSlug } from "@/data/okrugs";
@@ -18,6 +18,7 @@ export default function AddressPage() {
   const a = getAddress(Number(id));
   const [dialog, setDialog] = useState(false);
   const [subject, setSubject] = useState("");
+  const [mail, setMail] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,7 +28,7 @@ export default function AddressPage() {
     a
       ? {
           title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}, от ${formatPrice(a.price)} ₽ | Меркурий`,
-          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Гарантийное письмо, не массовый адрес, документы в день обращения.`,
+          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Почта — отдельно, ${MAIL_PRICE} ₽/мес. Гарантийное письмо, не массовый адрес.`,
           image: getPhoto(a),
           schema: [
             breadcrumbs([["База адресов", "/#catalog"], [a.okrug, `/okrug/${okrugSlug(a.okrug)}`], [a.district, `/district/${districtSlug(a.district)}`], [a.street, `/address/${a.id}`]]),
@@ -40,7 +41,9 @@ export default function AddressPage() {
   if (!a) return <NotFound />;
 
   const order = (kind?: string) => {
-    setSubject(`Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}`);
+    setSubject(
+      `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}${mail ? ` + почтовое обслуживание ${MAIL_PRICE} ₽/мес` : ""}`,
+    );
     setDialog(true);
   };
 
@@ -86,7 +89,7 @@ export default function AddressPage() {
             </p>
 
             <div className="mt-6 flex flex-wrap gap-1.5">
-              {a.tags.map((t) => (
+              {a.tags.filter((t) => t !== "Почта").map((t) => (
                 <span key={t} className="border border-line bg-surface px-2.5 py-1 text-[13px] font-medium">{t}</span>
               ))}
             </div>
@@ -110,6 +113,27 @@ export default function AddressPage() {
                   );
                 })}
               </ul>
+              <label className={`mt-3 flex cursor-pointer items-center gap-4 border px-5 py-4 transition-colors ${mail ? "border-primary bg-primary/5" : "border-dashed border-line hover:border-primary"}`}>
+                <input type="checkbox" checked={mail} onChange={(e) => setMail(e.target.checked)} className="h-5 w-5 flex-none accent-[hsl(var(--primary))]" />
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2 font-semibold leading-snug">
+                    <Icon name="Mail" size={16} className="text-primary" />
+                    Почтовое обслуживание
+                  </span>
+                  <span className="text-[13px] text-muted-foreground">
+                    Не входит в стоимость адреса, подключается отдельно: приём писем, сканы, хранение
+                  </span>
+                </span>
+                <span className="flex-none text-right">
+                  <span className="block whitespace-nowrap font-head text-[20px] font-extrabold leading-none">+{MAIL_PRICE} ₽</span>
+                  <span className="text-[12.5px] text-muted-foreground">в месяц</span>
+                </span>
+              </label>
+              {mail && (
+                <p className="mt-2 text-[13.5px] text-muted-foreground">
+                  За {MAIL_MONTHS} месяцев почта обойдётся в {formatPrice(MAIL_PRICE * MAIL_MONTHS)} ₽ — добавим её в заявку.
+                </p>
+              )}
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <button
                   onClick={() => order()}

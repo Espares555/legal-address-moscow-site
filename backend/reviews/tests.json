@@ -1,0 +1,5 @@
+{"tests": [
+  {"name": "Список одобренных отзывов", "method": "GET", "path": "/", "expectedStatus": 200, "expectedBody": {"items": []}, "bodyMatcher": "partial"},
+  {"name": "Пустой отзыв отклоняется", "method": "POST", "path": "/", "body": {"name": "", "rating": 5, "text": ""}, "expectedStatus": 400},
+  {"name": "Модерация без пароля запрещена", "method": "GET", "path": "/?admin=1", "expectedStatus": 401}
+]}

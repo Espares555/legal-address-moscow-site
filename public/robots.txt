@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /*?*
+Disallow: /admin/
 
 User-agent: Yandex
 Allow: /

@@ -6,7 +6,8 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import CompactExtras from "@/components/site/CompactExtras";
-import { REVIEWS, REVIEWS_AVG, formatAvg, initials } from "@/data/reviews";
+import { formatAvg, initials, useReviews } from "@/data/reviews";
+import ReviewForm from "@/components/site/ReviewForm";
 import { abs, breadcrumbs, useSeo } from "@/lib/seo";
 
 const BANDS = ["bg-band-1", "bg-band-2", "bg-band-3", "bg-band-4"];
@@ -23,12 +24,13 @@ const Stars = ({ n, size = 16 }: { n: number; size?: number }) => (
 export default function ReviewsPage() {
   const [dialog, setDialog] = useState(false);
   const [service, setService] = useState("all");
+  const { items: REVIEWS, avg: REVIEWS_AVG } = useReviews();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const services = useMemo(() => Array.from(new Set(REVIEWS.map((r) => r.service))), []);
+  const services = useMemo(() => Array.from(new Set(REVIEWS.map((r) => r.service))), [REVIEWS]);
   const list = service === "all" ? REVIEWS : REVIEWS.filter((r) => r.service === service);
   const dist = [5, 4, 3, 2, 1].map((n) => ({ n, count: REVIEWS.filter((r) => r.rating === n).length }));
 
@@ -89,6 +91,9 @@ export default function ReviewsPage() {
               <div className="pb-2">
                 <Stars n={5} size={18} />
                 <p className="mt-1 text-[14px] text-muted-foreground">{REVIEWS.length} отзывов</p>
+                <a href="#leave-review" className="mt-2 inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary hover:underline">
+                  <Icon name="PenLine" size={15} /> Оставить отзыв
+                </a>
               </div>
             </div>
             <ul className="space-y-2">
@@ -120,7 +125,7 @@ export default function ReviewsPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3">
           {list.map((r, i) => (
-            <article key={r.name} className="flex flex-col border-b border-line px-6 py-8 sm:border-r lg:px-9">
+            <article key={r.id ? `db-${r.id}` : r.name} className="flex flex-col border-b border-line px-6 py-8 sm:border-r lg:px-9">
               <div className="flex items-center justify-between gap-3">
                 <Stars n={r.rating} />
                 <time dateTime={r.date} className="text-[13px] text-muted-foreground">{fmtDate(r.date)}</time>
@@ -137,6 +142,19 @@ export default function ReviewsPage() {
             </article>
           ))}
         </div>
+
+        <section id="leave-review" className="grid scroll-mt-24 border-b border-line lg:grid-cols-[420px_1fr]">
+          <div className="border-b border-line p-6 lg:border-b-0 lg:border-r lg:p-12 lg:pl-14">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Ваше мнение</span>
+            <h2 className="mt-4 font-head text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em]">Оставить отзыв</h2>
+            <p className="mt-4 text-muted-foreground">
+              Работали с нами? Расскажите, как всё прошло — это помогает другим предпринимателям сделать выбор, а нам — становиться лучше.
+            </p>
+          </div>
+          <div className="p-6 lg:p-12">
+            <ReviewForm />
+          </div>
+        </section>
 
         <section className="grid border-b border-line bg-ink text-ink-foreground lg:grid-cols-[1.25fr_1fr]">
           <div className="p-6 lg:p-12">

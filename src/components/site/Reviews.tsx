@@ -1,7 +1,7 @@
 import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/use-reveal";
-import { REVIEWS, REVIEWS_AVG, formatAvg, initials } from "@/data/reviews";
+import { formatAvg, initials, useReviews } from "@/data/reviews";
 
 
 
@@ -9,7 +9,8 @@ const BANDS = ["bg-band-1", "bg-band-2", "bg-band-3", "bg-band-4"];
 
 export default function Reviews() {
   const ref = useReveal<HTMLElement>();
-  const avg = formatAvg(REVIEWS_AVG);
+  const { items: REVIEWS, avg: rawAvg } = useReviews();
+  const avg = formatAvg(rawAvg);
 
   return (
     <section id="reviews" ref={ref} className="scroll-mt-20 border-t border-line bg-background">
@@ -40,7 +41,7 @@ export default function Reviews() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3">
           {REVIEWS.slice(0, 6).map((r, i) => (
-            <article key={r.name} className="reveal flex flex-col border-b border-line px-6 py-8 sm:border-r lg:px-9">
+            <article key={r.id ? `db-${r.id}` : r.name} className="reveal flex flex-col border-b border-line px-6 py-8 sm:border-r lg:px-9">
               <div className="flex gap-0.5 text-primary" aria-label={`Оценка ${r.rating} из 5`}>
                 {Array.from({ length: 5 }).map((_, k) => (
                   <Icon key={k} name="Star" size={16} className={k < r.rating ? "fill-current" : "text-line"} />

@@ -1,4 +1,7 @@
-export type Review = { name: string; company: string; rating: number; text: string; service: string; date: string };
+import { useEffect, useState } from "react";
+import { API } from "@/lib/api";
+
+export type Review = { id?: number; name: string; company: string; rating: number; text: string; service: string; date: string };
 
 export const REVIEWS: Review[] = [
   { name: "Анна Соколова", company: "ООО «Северный ветер»", rating: 5, text: "Нужен был адрес именно в ИФНС № 10. Подобрали за час, документы привезли курьером на следующий день. Регистрация прошла с первого раза.", service: "Юридический адрес", date: "2026-09-12" },
@@ -17,3 +20,26 @@ export const REVIEWS: Review[] = [
 export const REVIEWS_AVG = REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length;
 export const formatAvg = (n: number) => n.toFixed(1).replace(".", ",");
 export const initials = (n: string) => n.split(" ").map((w) => w[0]).join("").slice(0, 2);
+
+
+export function useReviews() {
+  const [items, setItems] = useState<Review[]>(REVIEWS);
+
+  useEffect(() => {
+    let dead = false;
+    fetch(API.reviews)
+      .then((r) => r.json())
+      .then((d: { items?: Review[] }) => {
+        if (dead || !d.items?.length) return;
+        const all = [...d.items, ...REVIEWS].sort((a, b) => b.date.localeCompare(a.date));
+        setItems(all);
+      })
+      .catch(() => undefined);
+    return () => {
+      dead = true;
+    };
+  }, []);
+
+  const avg = items.reduce((s, r) => s + r.rating, 0) / items.length;
+  return { items, avg };
+}

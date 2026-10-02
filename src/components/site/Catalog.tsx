@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq, MAIL_PRICE } from "@/data/addresses";
+import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
 import ChipGroup from "./ChipGroup";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
@@ -189,8 +189,9 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                 </p>
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {a.tags.filter((t) => t === "Почта").map((t) => (
-                    <span key={t} className="border border-line bg-background px-2 py-0.5 text-[12px] font-medium">
-                      Почта — отдельно, {MAIL_PRICE} ₽/мес
+                    <span key={t} className="inline-flex items-center gap-1.5 border border-line bg-background px-2 py-0.5 text-[12px] font-medium">
+                      <Icon name="Mail" size={13} className="text-primary" />
+                      Почтовое обслуживание
                     </span>
                   ))}
                 </div>

@@ -196,6 +196,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                 </div>
                 <div className="mt-auto flex items-end justify-between pt-5">
                   <span className="font-head text-[24px] font-extrabold tracking-[-0.02em]">
+                    <span className="font-body text-[14px] font-medium tracking-normal text-muted-foreground">от </span>
                     {formatPrice(a.price)} ₽{" "}
                     <span className="font-body text-[12px] font-medium tracking-normal text-muted-foreground">/ {a.term}</span>
                   </span>

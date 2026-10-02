@@ -6,7 +6,7 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
-import { ADDRESSES, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
+import { ADDRESSES, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 import { okrugSlug } from "@/data/okrugs";
@@ -26,8 +26,8 @@ export default function AddressPage() {
   useSeo(
     a
       ? {
-          title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}, ${formatPrice(a.price)} ₽ | Меркурий`,
-          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) за ${formatPrice(a.price)} ₽ на ${a.term}. ИФНС № ${a.ifns}, метро ${a.metro}. Гарантийное письмо, не массовый адрес, документы в день обращения.`,
+          title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}, от ${formatPrice(a.price)} ₽ | Меркурий`,
+          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Гарантийное письмо, не массовый адрес, документы в день обращения.`,
           image: getPhoto(a),
           schema: [
             breadcrumbs([["База адресов", "/#catalog"], [a.okrug, `/okrug/${okrugSlug(a.okrug)}`], [a.district, `/district/${districtSlug(a.district)}`], [a.street, `/address/${a.id}`]]),
@@ -39,8 +39,8 @@ export default function AddressPage() {
 
   if (!a) return <NotFound />;
 
-  const order = () => {
-    setSubject(`Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})`);
+  const order = (kind?: string) => {
+    setSubject(`Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}`);
     setDialog(true);
   };
 
@@ -92,13 +92,27 @@ export default function AddressPage() {
             </div>
 
             <div className="mt-auto pt-10">
-              <div className="flex items-end gap-2">
-                <span className="font-head text-[48px] font-extrabold leading-none tracking-[-0.03em]">{formatPrice(a.price)} ₽</span>
-                <span className="pb-1.5 text-muted-foreground">/ {a.term}</span>
-              </div>
+              <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Цена за {a.term.replace("мес.", "месяцев")}</p>
+              <ul className="mt-3 border border-line">
+                {PRICE_LABELS.map((p) => {
+                  const min = a.prices[p.key] === a.price;
+                  return (
+                    <li key={p.key} className={`flex items-center justify-between gap-4 border-b border-line px-5 py-4 last:border-b-0 ${min ? "bg-surface" : ""}`}>
+                      <span className="min-w-0">
+                        <span className="block font-semibold leading-snug">{p.label}</span>
+                        <span className="text-[13px] text-muted-foreground">{p.hint}</span>
+                      </span>
+                      <span className="flex-none text-right">
+                        <span className="block whitespace-nowrap font-head text-[26px] font-extrabold leading-none tracking-[-0.02em]">{formatPrice(a.prices[p.key])} ₽</span>
+                        <button onClick={() => order(p.label)} className="mt-1 text-[13px] font-semibold text-primary hover:underline">Заказать</button>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <button
-                  onClick={order}
+                  onClick={() => order()}
                   className="inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-6 text-[16px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
                 >
                   Заказать адрес <Icon name="ArrowUpRight" size={18} />
@@ -163,7 +177,7 @@ export default function AddressPage() {
                 <Link key={s.id} to={`/address/${s.id}`} className="group border-b border-line p-6 transition-colors hover:bg-surface sm:border-r lg:p-9">
                   <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{s.okrug} · ИФНС № {s.ifns}</span>
                   <p className="mt-2 text-[17px] font-bold group-hover:text-primary">{s.street}</p>
-                  <p className="mt-3 font-head text-[22px] font-extrabold">{formatPrice(s.price)} ₽</p>
+                  <p className="mt-3 font-head text-[22px] font-extrabold"><span className="font-body text-[14px] font-medium text-muted-foreground">от </span>{formatPrice(s.price)} ₽</p>
                 </Link>
               ))}
             </div>

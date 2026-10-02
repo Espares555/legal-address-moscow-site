@@ -11,7 +11,7 @@ import Faq from "@/components/site/Faq";
 import Contacts from "@/components/site/Contacts";
 import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
-import { ADDRESSES, Address, EMPTY_FILTERS, Filters } from "@/data/addresses";
+import { ADDRESSES, Address, EMPTY_FILTERS, Filters, formatPrice } from "@/data/addresses";
 import { FAQ_ALL } from "@/data/faq";
 import { SERVICES } from "@/data/services";
 import { addressListSchema, faqSchema, itemList, useSeo } from "@/lib/seo";
@@ -29,7 +29,7 @@ const Index = () => {
   }, []);
 
   useSeo({
-    title: "Юридический адрес в Москве от 8 700 ₽ — база проверенных адресов | Меркурий",
+    title: `Юридический адрес в Москве от ${formatPrice(Math.min(...ADDRESSES.map((a) => a.price)))} ₽ — база проверенных адресов | Меркурий`,
     description: `Каталог из ${ADDRESSES.length} проверенных юридических адресов Москвы с фильтрами по ИФНС, округу, району и метро. Регистрация ООО и ИП, смена адреса, почта. Работаем с 1993 года.`,
     schema: [
       addressListSchema("Юридические адреса в Москве", ADDRESSES),

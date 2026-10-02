@@ -79,9 +79,9 @@ export default function YandexMap({ addresses, activeId, onSelect, zoom, classNa
       const pm = new ymaps.Placemark(
         [a.lat, a.lng],
         {
-          hintContent: `${a.street} — ${formatPrice(a.price)} ₽`,
+          hintContent: `${a.street} — от ${formatPrice(a.price)} ₽`,
           balloonContentHeader: a.street,
-          balloonContentBody: `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>${formatPrice(a.price)} ₽</b> / ${a.term}`,
+          balloonContentBody: `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>от ${formatPrice(a.price)} ₽</b> / ${a.term}`,
           balloonContentFooter: `<a href="/address/${a.id}" style="color:${PRIMARY};font-weight:600">Подробнее об адресе →</a>`,
         },
         { preset: "islands#circleDotIcon", iconColor: a.id === activeId ? INK : PRIMARY, openBalloonOnClick: !noBalloon, cursor: "pointer" },

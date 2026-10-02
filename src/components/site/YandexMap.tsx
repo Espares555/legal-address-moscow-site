@@ -34,12 +34,13 @@ type Props = {
   zoom?: number;
   className?: string;
   noBalloon?: boolean;
+  office?: { lat: number; lng: number; title: string; text: string };
 };
 
 const PRIMARY = "#6a3fe0";
 const INK = "#141414";
 
-export default function YandexMap({ addresses, activeId, onSelect, zoom, className, noBalloon }: Props) {
+export default function YandexMap({ addresses, activeId, onSelect, zoom, className, noBalloon, office }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const placemarks = useRef<Map<number, any>>(new Map());
@@ -75,6 +76,16 @@ export default function YandexMap({ addresses, activeId, onSelect, zoom, classNa
     if (!map.current || !ymaps) return;
     map.current.geoObjects.removeAll();
     placemarks.current.clear();
+    if (office) {
+      const pm = new ymaps.Placemark(
+        [office.lat, office.lng],
+        { hintContent: office.title, balloonContentHeader: office.title, balloonContentBody: office.text },
+        { preset: "islands#violetDotIcon", iconColor: PRIMARY },
+      );
+      map.current.geoObjects.add(pm);
+      map.current.setCenter([office.lat, office.lng], zoom ?? 16);
+      return;
+    }
     addresses.forEach((a) => {
       const pm = new ymaps.Placemark(
         [a.lat, a.lng],

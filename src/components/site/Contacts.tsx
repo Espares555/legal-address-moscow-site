@@ -1,13 +1,7 @@
 import Icon from "@/components/ui/icon";
 import RequestForm from "./RequestForm";
 import { useReveal } from "@/hooks/use-reveal";
-
-const INFO = [
-  { icon: "Phone", label: "Телефон", value: "+7 495 123-45-67", href: "tel:+74951234567" },
-  { icon: "Mail", label: "Почта", value: "hello@mercury-law.ru", href: "mailto:hello@mercury-law.ru" },
-  { icon: "MapPin", label: "Офис", value: "Москва, ул. Тверская, 18к1, офис 305" },
-  { icon: "Clock", label: "Часы работы", value: "Пн–Пт 9:00–20:00, Сб 10:00–16:00" },
-];
+import { CONTACTS as INFO } from "@/data/contacts";
 
 export default function Contacts() {
   const ref = useReveal<HTMLElement>();

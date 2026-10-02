@@ -9,9 +9,9 @@ const NAV: NavItem[] = [
   { href: "/#catalog", label: "База адресов", main: true, section: "catalog", paths: ["/address", "/ifns", "/okrug", "/district", "/metro"] },
   { href: "/#services", label: "Услуги", menu: true, main: true, section: "services", paths: ["/services"] },
   { href: "/about", label: "О нас", main: true, paths: ["/about"] },
-  { href: "/#reviews", label: "Отзывы", main: true, section: "reviews" },
+  { href: "/reviews", label: "Отзывы", main: true, section: "reviews", paths: ["/reviews"] },
   { href: "/faq", label: "Вопросы", main: true, section: "faq", paths: ["/faq"], noBurger: true },
-  { href: "/#contacts", label: "Контакты", main: true, section: "contacts" },
+  { href: "/contacts", label: "Контакты", main: true, section: "contacts", paths: ["/contacts"] },
   { href: "/#map", label: "На карте", icon: "Map", section: "map" },
   { href: "/articles", label: "Статьи", icon: "BookOpen", section: "articles", paths: ["/articles"] },
 ];

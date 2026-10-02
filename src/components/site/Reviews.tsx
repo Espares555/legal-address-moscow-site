@@ -1,21 +1,15 @@
 import Icon from "@/components/ui/icon";
+import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/use-reveal";
+import { REVIEWS, REVIEWS_AVG, formatAvg, initials } from "@/data/reviews";
 
-const REVIEWS = [
-  { name: "Анна Соколова", company: "ООО «Северный ветер»", rating: 5, text: "Нужен был адрес именно в ИФНС № 10. Подобрали за час, документы привезли курьером на следующий день. Регистрация прошла с первого раза." },
-  { name: "Дмитрий Волков", company: "ООО «Техноплан»", rating: 5, text: "Меняли юрадрес при переезде. Менеджер объяснил все нюансы, помог с формой Р13014. Почту пересылают сканами — очень удобно." },
-  { name: "Екатерина Лебедева", company: "ИП Лебедева Е. А.", rating: 5, text: "Брала адрес в ЦАО для небольшой студии. Цена честная, без скрытых доплат. Когда пришла проверка, собственник всё подтвердил." },
-  { name: "Игорь Морозов", company: "ООО «Логистик Групп»", rating: 4, text: "Удобный каталог с фильтрами — сразу видно цену и метро. Документы получили в день обращения. Хотелось бы чуть больше адресов в САО." },
-  { name: "Мария Кузнецова", company: "ООО «Зелёный квартал»", rating: 5, text: "Второй раз работаем с Меркурием. Продлили договор без лишних бумаг, напомнили заранее. Рекомендую коллегам." },
-  { name: "Алексей Новиков", company: "ООО «Дата Софт»", rating: 5, text: "Регистрировали ИТ-компанию, нужен был адрес с переговорной. Нашли в Москва-Сити, всё прошло гладко и быстро." },
-];
 
-const initials = (n: string) => n.split(" ").map((w) => w[0]).join("").slice(0, 2);
+
 const BANDS = ["bg-band-1", "bg-band-2", "bg-band-3", "bg-band-4"];
 
 export default function Reviews() {
   const ref = useReveal<HTMLElement>();
-  const avg = (REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length).toFixed(1).replace(".", ",");
+  const avg = formatAvg(REVIEWS_AVG);
 
   return (
     <section id="reviews" ref={ref} className="scroll-mt-20 border-t border-line bg-background">
@@ -45,7 +39,7 @@ export default function Reviews() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3">
-          {REVIEWS.map((r, i) => (
+          {REVIEWS.slice(0, 6).map((r, i) => (
             <article key={r.name} className="reveal flex flex-col border-b border-line px-6 py-8 sm:border-r lg:px-9">
               <div className="flex gap-0.5 text-primary" aria-label={`Оценка ${r.rating} из 5`}>
                 {Array.from({ length: 5 }).map((_, k) => (
@@ -63,6 +57,13 @@ export default function Reviews() {
             </article>
           ))}
         </div>
+        <Link
+          to="/reviews"
+          className="group flex items-center justify-center gap-2 border-b border-line py-6 font-semibold text-primary transition-colors hover:bg-surface"
+        >
+          Все отзывы ({REVIEWS.length})
+          <Icon name="ArrowRight" size={17} className="transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
     </section>
   );

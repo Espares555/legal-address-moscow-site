@@ -6,6 +6,7 @@ import Footer from "@/components/site/Footer";
 import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
+import CompactExtras from "@/components/site/CompactExtras";
 import { ADDRESSES, MAIL_MONTHS, MAIL_PRICE, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
@@ -207,6 +208,8 @@ export default function AddressPage() {
             </div>
           </div>
         )}
+
+        <CompactExtras />
       </div>
 
       <Footer />

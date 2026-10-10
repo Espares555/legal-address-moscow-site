@@ -94,12 +94,12 @@ export const organizationSchema = (): Json => ({
   priceRange: "₽₽",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "ул. Тверская, 18к1, офис 305",
+    streetAddress: "ул. Верхняя Радищевская, д. 5",
     addressLocality: "Москва",
     addressRegion: "Москва",
     addressCountry: "RU",
   },
-  geo: { "@type": "GeoCoordinates", latitude: 55.7666, longitude: 37.6043 },
+  geo: { "@type": "GeoCoordinates", latitude: 55.7437, longitude: 37.651 },
   areaServed: { "@type": "City", name: "Москва" },
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "20:00" },

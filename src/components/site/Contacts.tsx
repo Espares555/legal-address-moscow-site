@@ -1,7 +1,8 @@
 import Icon from "@/components/ui/icon";
 import RequestForm from "./RequestForm";
 import { useReveal } from "@/hooks/use-reveal";
-import { CONTACTS as INFO } from "@/data/contacts";
+import { CONTACTS as INFO, OFFICE } from "@/data/contacts";
+import YandexMap from "./YandexMap";
 
 export default function Contacts() {
   const ref = useReveal<HTMLElement>();
@@ -50,6 +51,12 @@ export default function Contacts() {
             <RequestForm dark />
           </div>
         </div>
+        <YandexMap
+          addresses={[]}
+          office={{ lat: OFFICE.lat, lng: OFFICE.lng, title: "Офис «Меркурий»", text: OFFICE.address }}
+          zoom={16}
+          className="h-[360px] border-t border-line lg:col-span-2"
+        />
       </div>
     </section>
   );

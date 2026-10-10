@@ -9,6 +9,7 @@ import YandexMap from "@/components/site/YandexMap";
 import CompactExtras from "@/components/site/CompactExtras";
 import NewBadge from "@/components/site/NewBadge";
 import AddressPrice from "@/components/site/AddressPrice";
+import { OFFICE } from "@/data/contacts";
 import { ADDRESSES, MAIL_MONTHS, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
@@ -163,6 +164,26 @@ export default function AddressPage() {
                 >
                   <Icon name="Phone" size={16} /> Позвонить
                 </a>
+              </div>
+              <p className="mt-5 text-[14.5px] text-muted-foreground">Или напишите нам по этому адресу — ответим в мессенджере:</p>
+              <div className="mt-3 flex items-center gap-3">
+                {[
+                  { label: "MAX", href: OFFICE.max, bg: "bg-[#7b4dff]", icon: null },
+                  { label: "Telegram", href: OFFICE.messengers[0].href, bg: "bg-[#229ed9]", icon: "Send" },
+                  { label: "WhatsApp", href: OFFICE.messengers[1].href, bg: "bg-[#25d366]", icon: "MessageCircle" },
+                ].map((m) => (
+                  <a
+                    key={m.label}
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Написать в ${m.label}`}
+                    title={m.label}
+                    className={`grid h-12 w-12 place-items-center rounded-full text-white transition-transform hover:-translate-y-0.5 ${m.bg}`}
+                  >
+                    {m.icon ? <Icon name={m.icon} size={22} /> : <span className="font-head text-[13px] font-extrabold tracking-tight">MAX</span>}
+                  </a>
+                ))}
               </div>
             </div>
           </div>

@@ -18,6 +18,7 @@ export const OFFICE = {
   howTo:
     "От метро «Таганская» выйдите на Таганскую площадь и идите по Верхней Радищевской улице в сторону Яузской. Дом 5 — по правой стороне, вход со двора.",
   parking: "Городская парковка вдоль Верхней Радищевской улицы и в соседних переулках.",
+  max: "https://max.ru/",
   messengers: [
     { label: "Telegram", icon: "Send", href: "https://t.me/merkuriy_adres" },
     { label: "WhatsApp", icon: "MessageCircle", href: "https://wa.me/74951234567" },

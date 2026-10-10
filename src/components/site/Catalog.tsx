@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { ADDRESSES, Address, EMPTY_FILTERS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
+import { ADDRESSES, Address, EMPTY_FILTERS, MAIL_MONTHS, Filters, applyFilters, formatPrice, getPhoto, plural, uniq } from "@/data/addresses";
 import ChipGroup from "./ChipGroup";
 import { okrugSlug } from "@/data/okrugs";
 import { metroSlug } from "@/data/metro";
 import { districtSlug } from "@/data/districts";
 import { useReveal } from "@/hooks/use-reveal";
+import NewBadge from "./NewBadge";
+import AddressPrice from "./AddressPrice";
 
 type Props = {
   filters: Filters;
@@ -30,9 +32,12 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
 
   const list = useMemo(() => {
     const r = applyFilters(ADDRESSES, filters);
-    return [...r].sort((a, b) =>
-      sort === "price-asc" ? a.price - b.price : sort === "price-desc" ? b.price - a.price : Number(a.ifns) - Number(b.ifns),
-    );
+    const cmp = (a: Address, b: Address) => {
+      if (sort === "ifns") return Number(a.ifns) - Number(b.ifns) || a.id - b.id;
+      if (a.available !== b.available) return a.available ? -1 : 1;
+      return sort === "price-asc" ? a.price - b.price : b.price - a.price;
+    };
+    return [...r].sort(cmp);
   }, [filters, sort]);
 
   const districts = useMemo(
@@ -177,6 +182,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                 <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em]">
                   <Link to={`/okrug/${okrugSlug(a.okrug)}`} className="bg-primary px-2 py-0.5 text-primary-foreground hover:bg-ink">{a.okrug}</Link>
                   <Link to={`/district/${districtSlug(a.district)}`} className="text-muted-foreground hover:text-primary">{a.district}</Link>
+                  {a.isNew && <NewBadge className="ml-auto" />}
                 </div>
                 <h3 className="mt-2 text-[18px] font-bold leading-snug tracking-[-0.01em]">
                   <Link to={`/address/${a.id}`} className="transition-colors hover:text-primary">
@@ -191,16 +197,12 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                   {a.tags.filter((t) => t === "Почта").map((t) => (
                     <span key={t} className="inline-flex items-center gap-1.5 border border-line bg-background px-2 py-0.5 text-[12px] font-medium">
                       <Icon name="Mail" size={13} className="text-primary" />
-                      Почтовое обслуживание
+                      Почта {formatPrice(a.mail)} ₽ / {MAIL_MONTHS} мес.
                     </span>
                   ))}
                 </div>
                 <div className="mt-auto flex items-end justify-between pt-5">
-                  <span className="font-head text-[24px] font-extrabold tracking-[-0.02em]">
-                    <span className="font-body text-[14px] font-medium tracking-normal text-muted-foreground">от </span>
-                    {formatPrice(a.price)} ₽{" "}
-                    <span className="font-body text-[12px] font-medium tracking-normal text-muted-foreground">/ {a.term}</span>
-                  </span>
+                  <AddressPrice a={a} size="lg" withTerm />
                   <button
                     onClick={() => onRequest(a)}
                     aria-label="Заказать адрес"

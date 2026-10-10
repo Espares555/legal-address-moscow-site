@@ -90,9 +90,9 @@ export default function YandexMap({ addresses, activeId, onSelect, zoom, classNa
       const pm = new ymaps.Placemark(
         [a.lat, a.lng],
         {
-          hintContent: `${a.street} — от ${formatPrice(a.price)} ₽`,
+          hintContent: a.available ? `${a.street} — от ${formatPrice(a.price)} ₽` : `${a.street} — временно не предоставляется`,
           balloonContentHeader: a.street,
-          balloonContentBody: `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>от ${formatPrice(a.price)} ₽</b> / ${a.term}`,
+          balloonContentBody: a.available ? `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>от ${formatPrice(a.price)} ₽</b> / ${a.term}` : `ИФНС № ${a.ifns} · м. ${a.metro}<br/><b>Временно не предоставляется</b>`,
           balloonContentFooter: `<a href="/address/${a.id}" style="color:${PRIMARY};font-weight:600">Подробнее об адресе →</a>`,
         },
         { preset: "islands#circleDotIcon", iconColor: a.id === activeId ? INK : PRIMARY, openBalloonOnClick: !noBalloon, cursor: "pointer" },

@@ -7,7 +7,9 @@ import RequestDialog from "@/components/site/RequestDialog";
 import RequestForm from "@/components/site/RequestForm";
 import YandexMap from "@/components/site/YandexMap";
 import CompactExtras from "@/components/site/CompactExtras";
-import { ADDRESSES, MAIL_MONTHS, MAIL_PRICE, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
+import NewBadge from "@/components/site/NewBadge";
+import AddressPrice from "@/components/site/AddressPrice";
+import { ADDRESSES, MAIL_MONTHS, PRICE_LABELS, formatPrice, getAddress, getDescription, getPhoto } from "@/data/addresses";
 import { breadcrumbs, placeSchema, useSeo } from "@/lib/seo";
 import NotFound from "./NotFound";
 import { okrugSlug } from "@/data/okrugs";
@@ -28,8 +30,10 @@ export default function AddressPage() {
   useSeo(
     a
       ? {
-          title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}, от ${formatPrice(a.price)} ₽ | Меркурий`,
-          description: `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Почта — отдельно, ${MAIL_PRICE} ₽/мес. Гарантийное письмо, не массовый адрес.`,
+          title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}${a.available ? `, от ${formatPrice(a.price)} ₽` : ""} | Меркурий`,
+          description: a.available
+            ? `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Почтовое обслуживание — ${formatPrice(a.mail)} ₽ за ${MAIL_MONTHS} месяцев.`
+            : `Юридический адрес ${a.street} (${a.district}, ${a.okrug}), ИФНС № ${a.ifns}, метро ${a.metro}. Сейчас адрес временно не предоставляется — подберём похожий вариант.`,
           image: getPhoto(a),
           schema: [
             breadcrumbs([["База адресов", "/#catalog"], [a.okrug, `/okrug/${okrugSlug(a.okrug)}`], [a.district, `/district/${districtSlug(a.district)}`], [a.street, `/address/${a.id}`]]),
@@ -43,12 +47,12 @@ export default function AddressPage() {
 
   const order = (kind?: string) => {
     setSubject(
-      `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}${mail ? ` + почтовое обслуживание ${MAIL_PRICE} ₽/мес` : ""}`,
+      `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}${mail ? ` + почтовое обслуживание ${formatPrice(a.mail)} ₽ за ${MAIL_MONTHS} мес.` : ""}`,
     );
     setDialog(true);
   };
 
-  const similar = ADDRESSES.filter((x) => x.id !== a.id && (x.okrug === a.okrug || x.ifns === a.ifns)).slice(0, 4);
+  const similar = ADDRESSES.filter((x) => x.id !== a.id && x.available && (x.ifns === a.ifns || x.okrug === a.okrug)).sort((x, y) => Number(y.ifns === a.ifns) - Number(x.ifns === a.ifns)).slice(0, 4);
 
   const facts: [string, string, string][] = [
     ["Landmark", "ИФНС", `№ ${a.ifns}`],
@@ -56,7 +60,7 @@ export default function AddressPage() {
     ["Map", "Округ", a.okrug],
     ["MapPinned", "Район", a.district],
     ["Building2", "Объект", a.area],
-    ["CalendarClock", "Срок договора", a.term],
+    ["Ruler", "Площадь", `${a.sqm} м²`],
   ];
 
   return (
@@ -82,10 +86,13 @@ export default function AddressPage() {
           </div>
 
           <div className="flex flex-col border-b border-line p-6 lg:p-12">
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Юридический адрес</span>
+            <span className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+              Юридический адрес
+              {a.isNew && <NewBadge />}
+            </span>
             <h1 className="mt-4 font-head text-[36px] font-extrabold leading-[1.02] tracking-[-0.035em] md:text-[52px]">{a.street}</h1>
             <p className="mt-3 text-muted-foreground">
-              <Link to={`/district/${districtSlug(a.district)}`} className="hover:text-primary hover:underline">{a.district}</Link>, {a.okrug} ·{" "}
+              {a.postcode}, Москва · <Link to={`/district/${districtSlug(a.district)}`} className="hover:text-primary hover:underline">{a.district}</Link>, {a.okrug} ·{" "}
               <Link to={`/metro/${metroSlug(a.metro)}`} className="hover:text-primary hover:underline">м. {a.metro}</Link>
             </p>
 
@@ -93,27 +100,39 @@ export default function AddressPage() {
               {a.tags.filter((t) => t !== "Почта").map((t) => (
                 <span key={t} className="border border-line bg-surface px-2.5 py-1 text-[13px] font-medium">{t}</span>
               ))}
+              {a.features && <span className="border border-line bg-surface px-2.5 py-1 text-[13px] font-medium">{a.features}</span>}
             </div>
 
             <div className="mt-auto pt-10">
-              <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Цена за {a.term.replace("мес.", "месяцев")}</p>
-              <ul className="mt-3 border border-line">
-                {PRICE_LABELS.map((p) => {
-                  const min = a.prices[p.key] === a.price;
-                  return (
-                    <li key={p.key} className={`flex items-center justify-between gap-4 border-b border-line px-5 py-4 last:border-b-0 ${min ? "bg-surface" : ""}`}>
-                      <span className="min-w-0">
-                        <span className="block font-semibold leading-snug">{p.label}</span>
-                        <span className="text-[13px] text-muted-foreground">{p.hint}</span>
-                      </span>
-                      <span className="flex-none text-right">
-                        <span className="block whitespace-nowrap font-head text-[26px] font-extrabold leading-none tracking-[-0.02em]">{formatPrice(a.prices[p.key])} ₽</span>
-                        <button onClick={() => order(p.label)} className="mt-1 text-[13px] font-semibold text-primary hover:underline">Заказать</button>
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
+              {a.available ? (
+                <>
+                  <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Цена за {a.term.replace("мес.", "месяцев")}</p>
+                  <ul className="mt-3 border border-line">
+                    {PRICE_LABELS.map((p) => {
+                      const min = a.prices[p.key] === a.price;
+                      return (
+                        <li key={p.key} className={`flex items-center justify-between gap-4 border-b border-line px-5 py-4 last:border-b-0 ${min ? "bg-surface" : ""}`}>
+                          <span className="min-w-0">
+                            <span className="block font-semibold leading-snug">{p.label}</span>
+                            <span className="text-[13px] text-muted-foreground">{a.notes?.[p.key] ? `${p.hint} · ${a.notes[p.key]}` : p.hint}</span>
+                          </span>
+                          <span className="flex-none text-right">
+                            <span className="block whitespace-nowrap font-head text-[26px] font-extrabold leading-none tracking-[-0.02em]">{formatPrice(a.prices[p.key])} ₽</span>
+                            <button onClick={() => order(p.label)} className="mt-1 text-[13px] font-semibold text-primary hover:underline">Заказать</button>
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              ) : (
+                <div className="border border-dashed border-line bg-surface px-5 py-5">
+                  <p className="font-semibold">{a.note || "Временно не предоставляется"}</p>
+                  <p className="mt-1 text-[14px] text-muted-foreground">
+                    {a.note ? "Новые договоры на этот адрес не заключаются — можно продлить действующий." : "Оставьте заявку — подберём похожий адрес в этой инспекции или сообщим, когда объект освободится."}
+                  </p>
+                </div>
+              )}
               <label className={`mt-3 flex cursor-pointer items-center gap-4 border px-5 py-4 transition-colors ${mail ? "border-primary bg-primary/5" : "border-dashed border-line hover:border-primary"}`}>
                 <input type="checkbox" checked={mail} onChange={(e) => setMail(e.target.checked)} className="h-5 w-5 flex-none accent-[hsl(var(--primary))]" />
                 <span className="min-w-0 flex-1">
@@ -126,15 +145,11 @@ export default function AddressPage() {
                   </span>
                 </span>
                 <span className="flex-none text-right">
-                  <span className="block whitespace-nowrap font-head text-[20px] font-extrabold leading-none">+{MAIL_PRICE} ₽</span>
-                  <span className="text-[12.5px] text-muted-foreground">в месяц</span>
+                  <span className="block whitespace-nowrap font-head text-[20px] font-extrabold leading-none">+{formatPrice(a.mail)} ₽</span>
+                  <span className="text-[12.5px] text-muted-foreground">за {MAIL_MONTHS} месяцев</span>
                 </span>
               </label>
-              {mail && (
-                <p className="mt-2 text-[13.5px] text-muted-foreground">
-                  За {MAIL_MONTHS} месяцев почта обойдётся в {formatPrice(MAIL_PRICE * MAIL_MONTHS)} ₽ — добавим её в заявку.
-                </p>
-              )}
+              {mail && <p className="mt-2 text-[13.5px] text-muted-foreground">Добавим почтовое обслуживание в заявку.</p>}
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <button
                   onClick={() => order()}
@@ -201,8 +216,8 @@ export default function AddressPage() {
               {similar.map((s) => (
                 <Link key={s.id} to={`/address/${s.id}`} className="group border-b border-line p-6 transition-colors hover:bg-surface sm:border-r lg:p-9">
                   <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{s.okrug} · ИФНС № {s.ifns}</span>
-                  <p className="mt-2 text-[17px] font-bold group-hover:text-primary">{s.street}</p>
-                  <p className="mt-3 font-head text-[22px] font-extrabold"><span className="font-body text-[14px] font-medium text-muted-foreground">от </span>{formatPrice(s.price)} ₽</p>
+                  <p className="mt-2 text-[17px] font-bold group-hover:text-primary">{s.street}{s.isNew && <NewBadge className="ml-2 align-middle" />}</p>
+                  <p className="mt-3"><AddressPrice a={s} /></p>
                 </Link>
               ))}
             </div>

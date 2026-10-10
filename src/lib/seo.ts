@@ -147,7 +147,7 @@ export const parsePrice = (s: string) => {
   return Number.isFinite(n) ? n : 0;
 };
 
-type Addr = { id: number; street: string; price: number; prices: { create: number; inside: number; outside: number }; lat: number; lng: number; metro: string; ifns: string; district: string; okrug: string };
+type Addr = { id: number; street: string; price: number; available: boolean; prices: { create: number; inside: number; outside: number }; lat: number; lng: number; metro: string; ifns: string; district: string; okrug: string };
 
 export const addressListSchema = (name: string, list: Addr[]): Json => ({
   "@context": "https://schema.org",
@@ -161,7 +161,7 @@ export const addressListSchema = (name: string, list: Addr[]): Json => ({
     url: abs(`/address/${a.id}`),
     price: a.price,
     priceCurrency: "RUB",
-    availability: "https://schema.org/InStock",
+    availability: a.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     seller: { "@id": origin() + "/#organization" },
     itemOffered: {
       "@type": "Service",
@@ -180,7 +180,9 @@ export const placeSchema = (a: Addr, image: string, description: string): Json =
   sku: `addr-${a.id}`,
   brand: { "@type": "Brand", name: SITE_NAME },
   category: "Аренда юридического адреса",
-  offers: {
+  offers: !a.available
+    ? { "@type": "Offer", url: abs(`/address/${a.id}`), priceCurrency: "RUB", price: 0, availability: "https://schema.org/OutOfStock", seller: { "@id": origin() + "/#organization" } }
+    : {
     "@type": "AggregateOffer",
     url: abs(`/address/${a.id}`),
     priceCurrency: "RUB",

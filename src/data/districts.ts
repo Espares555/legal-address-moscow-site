@@ -1,4 +1,4 @@
-import { ADDRESSES, Address } from "./addresses";
+import { ADDRESSES, Address, minPriceOf } from "./addresses";
 import { metroSlug } from "./metro";
 
 const ABOUT: Record<string, string> = {
@@ -43,7 +43,7 @@ export const getDistrictBySlug = (slug: string): District | undefined => {
     okrug: addresses[0].okrug,
     ifns: u("ifns").sort((a, b) => Number(a) - Number(b)),
     metros: u("metro"),
-    minPrice: Math.min(...addresses.map((a) => a.price)),
+    minPrice: minPriceOf(addresses),
   };
 };
 

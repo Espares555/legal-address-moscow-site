@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import Header from "@/components/site/Header";
+import AddressPrice from "@/components/site/AddressPrice";
+import NewBadge from "@/components/site/NewBadge";
 import Footer from "@/components/site/Footer";
 import CompactExtras from "@/components/site/CompactExtras";
 import RequestDialog from "@/components/site/RequestDialog";
@@ -118,12 +120,13 @@ export default function DistrictPage() {
                   <div className="min-w-0 flex-1">
                     <Link to={`/address/${a.id}`} className="block font-bold hover:text-primary">
                       {a.street}
+                      {a.isNew && <NewBadge className="ml-2 align-middle" />}
                     </Link>
                     <p className="text-[13px] text-muted-foreground">
                       ИФНС № {a.ifns} · м. {a.metro}
                     </p>
                     <div className="mt-1 flex items-center justify-between gap-2">
-                      <span className="font-head text-[18px] font-extrabold"><span className="font-body text-[13px] font-medium text-muted-foreground">от </span>{formatPrice(a.price)} ₽</span>
+                      <AddressPrice a={a} />
                       <button
                         onClick={() => order(`Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})`)}
                         className="h-8 bg-ink px-3 text-[13px] font-semibold text-ink-foreground transition-colors hover:bg-primary"

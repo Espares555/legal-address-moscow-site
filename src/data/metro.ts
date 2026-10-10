@@ -1,4 +1,4 @@
-import { ADDRESSES, Address } from "./addresses";
+import { ADDRESSES, Address, minPriceOf } from "./addresses";
 
 const TR: Record<string, string> = {
   а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "e", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o",
@@ -51,7 +51,7 @@ export const getMetroBySlug = (slug: string): Metro | undefined => {
     okrugs: u(own, "okrug"),
     districts: u(own, "district"),
     ifns: u(addresses, "ifns").sort((a, b) => Number(a) - Number(b)),
-    minPrice: Math.min(...addresses.map((a) => a.price)),
+    minPrice: minPriceOf(addresses),
   };
 };
 

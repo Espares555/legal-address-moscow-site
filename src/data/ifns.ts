@@ -1,4 +1,4 @@
-import { ADDRESSES, Address, uniq } from "./addresses";
+import { ADDRESSES, Address, minPriceOf, uniq } from "./addresses";
 
 export type Ifns = {
   num: string;
@@ -19,7 +19,7 @@ export const getIfns = (num: string): Ifns | undefined => {
     districts: u("district"),
     metros: u("metro"),
     addresses,
-    minPrice: Math.min(...addresses.map((a) => a.price)),
+    minPrice: minPriceOf(addresses),
   };
 };
 

@@ -102,8 +102,7 @@ export const organizationSchema = (): Json => ({
   geo: { "@type": "GeoCoordinates", latitude: 55.7437, longitude: 37.651 },
   areaServed: { "@type": "City", name: "Москва" },
   openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "20:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "10:00", closes: "16:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "10:00", closes: "18:00" },
   ],
 });
 

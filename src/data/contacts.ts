@@ -4,7 +4,7 @@ export const CONTACTS: ContactItem[] = [
   { icon: "Phone", label: "Телефон", value: "+7 495 226-15-49", href: "tel:+74952261549" },
   { icon: "Mail", label: "Почта", value: "info@mercury-law.ru", href: "mailto:info@mercury-law.ru" },
   { icon: "MapPin", label: "Офис", value: "Москва, ул. Верхняя Радищевская, д. 5" },
-  { icon: "Clock", label: "Часы работы", value: "Пн–Пт 9:00–20:00, Сб 10:00–16:00" },
+  { icon: "Clock", label: "Часы работы", value: "Пн–Пт 10:00–18:00" },
 ];
 
 export const OFFICE = {

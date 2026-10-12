@@ -18,8 +18,8 @@ export default function Faq() {
             <br />и ответы
           </h2>
           <p className="mt-6 text-muted-foreground">Не нашли свой вопрос? Позвоните — юрист ответит бесплатно.</p>
-          <a href="tel:+74951234567" className="mt-4 inline-block font-head text-2xl font-extrabold hover:text-primary">
-            +7 495 123-45-67
+          <a href="tel:+74952261549" className="mt-4 inline-block font-head text-2xl font-extrabold hover:text-primary">
+            +7 495 226-15-49
           </a>
           <Link to="/faq" className="mt-8 flex items-center gap-2 font-semibold text-primary hover:underline">
             Все вопросы и ответы ({FAQ_ALL.length}) <Icon name="ArrowRight" size={16} />

@@ -159,7 +159,7 @@ export default function AddressPage() {
                   Заказать адрес <Icon name="ArrowUpRight" size={18} />
                 </button>
                 <a
-                  href="tel:+74951234567"
+                  href="tel:+74952261549"
                   className="inline-flex h-14 items-center justify-center gap-2 rounded-sm border border-line px-6 font-semibold transition-colors hover:border-primary hover:text-primary"
                 >
                   <Icon name="Phone" size={16} /> Позвонить

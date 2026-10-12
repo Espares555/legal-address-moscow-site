@@ -163,8 +163,8 @@ export default function Header({ onPick }: Props) {
           </nav>
 
           <div className="ml-auto hidden items-center gap-7 text-[15.5px] font-medium md:flex xl:ml-0">
-            <a href="tel:+74951234567" className="transition-colors hover:text-primary">
-              +7 495 123-45-67
+            <a href="tel:+74952261549" className="transition-colors hover:text-primary">
+              +7 495 226-15-49
             </a>
             <button
               onClick={onPick}

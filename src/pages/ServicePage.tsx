@@ -95,7 +95,7 @@ export default function ServicePage() {
               <button onClick={scrollToForm} className="h-12 bg-primary px-7 font-semibold text-primary-foreground transition-colors hover:bg-ink">
                 Оставить заявку
               </button>
-              <a href="tel:+74951234567" className="font-semibold hover:text-primary">+7 495 123-45-67</a>
+              <a href="tel:+74952261549" className="font-semibold hover:text-primary">+7 495 226-15-49</a>
             </div>
           </div>
           <div className={`relative flex flex-col justify-end overflow-hidden p-6 text-white lg:p-12 ${s.color}`}>

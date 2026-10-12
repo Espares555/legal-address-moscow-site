@@ -1,6 +1,6 @@
 import Icon from "@/components/ui/icon";
 
-const WHATSAPP = "https://wa.me/74951234567";
+const WHATSAPP = "https://wa.me/74952261549";
 const TELEGRAM = "https://t.me/merkuriy_adres";
 
 const LINKS = [

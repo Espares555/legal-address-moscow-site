@@ -125,8 +125,8 @@ export default function FaqPage() {
               свой вопрос?
             </h2>
             <p className="mt-5 max-w-md text-ink-foreground/70">Оставьте заявку или позвоните — юрист ответит бесплатно.</p>
-            <a href="tel:+74951234567" className="mt-6 inline-block font-head text-2xl font-extrabold hover:text-band-1">
-              +7 495 123-45-67
+            <a href="tel:+74952261549" className="mt-6 inline-block font-head text-2xl font-extrabold hover:text-band-1">
+              +7 495 226-15-49
             </a>
           </div>
           <div className="p-6 lg:p-12">

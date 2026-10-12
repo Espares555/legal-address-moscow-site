@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 export const SITE_NAME = "Меркурий";
 export const DEFAULT_IMAGE = "https://cdn.poehali.dev/projects/59523c27-a9b3-49d8-adc5-d0bc3334a737/files/240195ce-b572-45d2-b62d-ebd95f9fd17e.jpg";
 export const PHONE = "+7 495 226-15-49";
-export const EMAIL = "hello@mercury-law.ru";
+export const EMAIL = "info@mercury-law.ru";
 
 type Json = Record<string, unknown>;
 

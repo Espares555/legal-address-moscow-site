@@ -181,7 +181,7 @@ export default function ServicePage() {
               <h2 className="font-head text-[30px] font-extrabold tracking-[-0.03em]">Банки-партнёры</h2>
               <p className="max-w-md text-muted-foreground">Работаем напрямую с банками — вы получаете специальные условия и сопровождение персонального менеджера.</p>
             </div>
-            <div className="grid md:grid-cols-3">
+            <div className="grid md:grid-cols-2 xl:grid-cols-4">
               {s.partners.map((b) => (
                 <div key={b.name} className="flex flex-col border-b border-line md:border-b-0 md:border-r md:last:border-r-0">
                   <div className="relative flex h-32 items-center justify-center border-b border-line bg-white px-8">
@@ -201,7 +201,7 @@ export default function ServicePage() {
                       onClick={() => order(`Открытие расчётного счёта: ${b.name}`)}
                       className="mt-7 h-12 bg-ink font-semibold text-ink-foreground transition-colors hover:bg-primary"
                     >
-                      Открыть счёт в {b.name === "Сбербанк" ? "Сбербанке" : b.name === "Альфа-Банк" ? "Альфа-Банке" : "Т-Банке"}
+                      Открыть счёт в {b.name === "Сбербанк" ? "Сбербанке" : b.name === "Альфа-Банк" ? "Альфа-Банке" : b.name === "ВТБ" ? "ВТБ" : "Т-Банке"}
                     </button>
                   </div>
                 </div>

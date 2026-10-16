@@ -18,19 +18,19 @@ export default function BankPartners() {
             Подробнее <Icon name="ArrowRight" size={15} className="transition-transform group-hover:translate-x-1" />
           </span>
         </Link>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-4">
           {partners.map((b) => (
             <Link
               key={b.name}
               to={url}
               aria-label={`Открыть счёт: ${b.name}`}
-              className="group relative flex h-28 items-center justify-center border-r border-line px-4 transition-colors last:border-r-0 hover:bg-surface lg:h-32 lg:px-10"
+              className="group relative flex h-28 items-center justify-center border-r border-line px-2 transition-colors last:border-r-0 hover:bg-surface sm:px-4 lg:h-32 lg:px-6"
             >
               <img
                 src={b.logo}
                 alt={b.name}
                 loading="lazy"
-                className="h-7 w-auto max-w-full object-contain grayscale opacity-70 transition-all group-hover:opacity-100 group-hover:grayscale-0 sm:h-9 lg:h-11"
+                className="h-5 w-auto max-w-full object-contain grayscale opacity-70 transition-all group-hover:opacity-100 group-hover:grayscale-0 sm:h-8 lg:h-10"
               />
               <span className={`absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 transition-transform group-hover:scale-x-100 ${b.color}`} />
             </Link>

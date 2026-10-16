@@ -181,9 +181,9 @@ export default function ServicePage() {
               <h2 className="font-head text-[30px] font-extrabold tracking-[-0.03em]">Банки-партнёры</h2>
               <p className="max-w-md text-muted-foreground">Работаем напрямую с банками — вы получаете специальные условия и сопровождение персонального менеджера.</p>
             </div>
-            <div className="grid md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid auto-rows-fr md:grid-cols-2 xl:grid-cols-4">
               {s.partners.map((b) => (
-                <div key={b.name} className="flex flex-col border-b border-line md:border-b-0 md:border-r md:last:border-r-0">
+                <div key={b.name} className="flex h-full flex-col border-b border-line md:border-b-0 md:border-r md:last:border-r-0">
                   <div className="relative flex h-32 items-center justify-center border-b border-line bg-white px-8">
                     <img src={b.logo} alt={b.name} loading="lazy" className="h-12 w-auto max-w-full object-contain" />
                     <span className={`absolute inset-x-0 bottom-0 h-1.5 ${b.color}`} />

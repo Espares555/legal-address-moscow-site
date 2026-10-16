@@ -33,7 +33,7 @@ export default function AddressPage() {
       ? {
           title: `Юридический адрес ${a.street} — ИФНС № ${a.ifns}, м. ${a.metro}${a.available ? `, от ${formatPrice(a.price)} ₽` : ""} | Меркурий`,
           description: a.available
-            ? `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Почтовое обслуживание — ${formatPrice(a.mail)} ₽ в месяц.`
+            ? `Аренда юридического адреса ${a.street} (${a.district}, ${a.okrug}) на ${a.term}: создание компании — ${formatPrice(a.prices.create)} ₽, смена адреса внутри ИФНС — ${formatPrice(a.prices.inside)} ₽, из других ИФНС — ${formatPrice(a.prices.outside)} ₽. ИФНС № ${a.ifns}, метро ${a.metro}. Почтовое обслуживание — ${formatPrice(a.mail)} ₽ в месяц, минимум 3 месяца.`
             : `Юридический адрес ${a.street} (${a.district}, ${a.okrug}), ИФНС № ${a.ifns}, метро ${a.metro}. Сейчас адрес временно не предоставляется — подберём похожий вариант.`,
           image: getPhoto(a),
           schema: [
@@ -48,7 +48,7 @@ export default function AddressPage() {
 
   const order = (kind?: string) => {
     setSubject(
-      `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}${mail ? ` + почтовое обслуживание ${formatPrice(a.mail)} ₽ в месяц` : ""}`,
+      `Интересует адрес: ${a.street} (ИФНС № ${a.ifns}, ${a.okrug})${kind ? ` — ${kind.toLowerCase()}` : ""}${mail ? ` + почтовое обслуживание ${formatPrice(a.mail)} ₽ в месяц (минимум 3 месяца)` : ""}`,
     );
     setDialog(true);
   };
@@ -147,7 +147,7 @@ export default function AddressPage() {
                 </span>
                 <span className="flex-none text-right">
                   <span className="block whitespace-nowrap font-head text-[20px] font-extrabold leading-none">+{formatPrice(a.mail)} ₽</span>
-                  <span className="text-[12.5px] text-muted-foreground">в месяц</span>
+                  <span className="text-[12.5px] text-muted-foreground">в месяц, от 3 мес.</span>
                 </span>
               </label>
               {mail && <p className="mt-2 text-[13.5px] text-muted-foreground">Добавим почтовое обслуживание в заявку.</p>}

@@ -197,7 +197,7 @@ export default function Catalog({ filters, setFilters, onRequest }: Props) {
                   {a.tags.filter((t) => t === "Почта").map((t) => (
                     <span key={t} className="inline-flex items-center gap-1.5 border border-line bg-background px-2 py-0.5 text-[12px] font-medium">
                       <Icon name="Mail" size={13} className="text-primary" />
-                      Почта {formatPrice(a.mail)} ₽ / мес.
+                      Почта {formatPrice(a.mail)} ₽ / мес., от 3 мес.
                     </span>
                   ))}
                 </div>

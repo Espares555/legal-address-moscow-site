@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Messengers from "./components/site/Messengers";
+import CallButton from "./components/site/CallButton";
 import AddressPage from "./pages/AddressPage";
 import IfnsPage from "./pages/IfnsPage";
 import OkrugPage from "./pages/OkrugPage";
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Messengers />
+        <CallButton />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

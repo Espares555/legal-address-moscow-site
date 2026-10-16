@@ -10,7 +10,7 @@ const LINKS = [
 
 export default function Messengers() {
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-3 lg:bottom-8 lg:right-8">
+    <div className="fixed bottom-24 right-5 z-50 flex flex-col gap-3 lg:bottom-8 lg:right-8">
       {LINKS.map((l) => (
         <a
           key={l.href}

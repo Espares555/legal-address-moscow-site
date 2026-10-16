@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import LogoMark from "./LogoMark";
 import { SERVICES } from "@/data/services";
 
 type NavItem = { href: string; label: string; main?: boolean; menu?: boolean; icon?: string; section?: string; paths?: string[]; noBurger?: boolean };
@@ -86,8 +87,9 @@ export default function Header({ onPick }: Props) {
 
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
         <div className="flex h-[72px] items-center px-5 lg:px-9">
-          <a href="/#top" className="font-head text-[26px] font-extrabold tracking-[-0.03em]">
-            Меркурий<span className="text-primary">.</span>
+          <a href="/#top" className="flex items-center gap-2.5 font-head text-[26px] font-extrabold tracking-[-0.03em]">
+            <LogoMark size={34} />
+            <span>Меркурий<span className="text-primary">.</span></span>
           </a>
 
           <nav className="mx-auto hidden items-center gap-8 text-[15.5px] font-medium xl:flex">

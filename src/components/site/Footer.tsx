@@ -1,3 +1,4 @@
+import LogoMark from "./LogoMark";
 import { IFNS_LIST } from "@/data/ifns";
 import { OKRUG_INFO, OKRUG_LIST } from "@/data/okrugs";
 import { METRO_LIST, metroSlug } from "@/data/metro";
@@ -5,7 +6,7 @@ import { DISTRICT_LIST, districtSlug } from "@/data/districts";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-topbar text-topbar-foreground">
+    <footer className="border-t border-line bg-topbar pb-20 text-topbar-foreground lg:pb-0">
       <div className="grid grid-rows-4" aria-hidden="true">
         <div className="h-2 bg-band-1" />
         <div className="h-2 bg-band-2" />
@@ -14,8 +15,9 @@ export default function Footer() {
       </div>
       <div className="flex flex-col gap-8 px-6 py-12 lg:flex-row lg:items-end lg:justify-between lg:px-14">
         <div>
-          <a href="/#top" className="font-head text-[40px] font-extrabold tracking-[-0.03em]">
-            Меркурий<span className="text-band-1">.</span>
+          <a href="/#top" className="flex items-center gap-3 font-head text-[40px] font-extrabold tracking-[-0.03em]">
+            <LogoMark size={46} />
+            <span>Меркурий<span className="text-band-1">.</span></span>
           </a>
           <p className="mt-2 max-w-sm text-topbar-foreground/60">База юридических адресов Москвы для регистрации и смены юрадреса.</p>
         </div>
